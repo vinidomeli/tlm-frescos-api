@@ -32,8 +32,8 @@ public class Batch {
 
     private Integer initialQuantity;
     private Integer currentQuantity;
-    private Float minimumTemperature;
-    private Float currentTemperature;
+    private Double minimumTemperature;
+    private Double currentTemperature;
     private LocalDateTime manufacturingTime;
     private LocalDate manufacturingDate;
     private LocalDate dueDate;
