@@ -17,9 +17,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-    - name: Clean
-      run: mvn clean
-    - name: Build
-      run: mvn package
+    - name: Current workdir
+      run: ls -a
     - name: Test
       run: mvn test
