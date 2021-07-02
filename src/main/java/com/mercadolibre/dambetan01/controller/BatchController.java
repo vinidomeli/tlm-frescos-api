@@ -1,7 +1,5 @@
 package com.mercadolibre.dambetan01.controller;
 
-import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
-import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
 import com.mercadolibre.dambetan01.service.crud.BatchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
