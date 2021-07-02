@@ -6,22 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Table(name="accounts")
+@Table(name="User")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username, password;
-    private Integer rol;
+    private UUID id;
+    private String name;
+    private String role;
+    private String login;
+    private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_country_house_fk", nullable = false)
-    private CountryHouse countryHouse;
 }

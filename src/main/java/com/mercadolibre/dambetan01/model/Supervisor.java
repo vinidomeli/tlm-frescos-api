@@ -8,20 +8,20 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name="accounts")
+@Table(name="Supervisor")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class Supervisor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username, password;
-    private Integer rol;
+    private Long registerNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_country_house_fk", nullable = false)
-    private CountryHouse countryHouse;
+    @OneToOne
+    @JoinColumn(name = "fk_user", referencedColumnName = "id")
+    private User user;
+
+
 }
