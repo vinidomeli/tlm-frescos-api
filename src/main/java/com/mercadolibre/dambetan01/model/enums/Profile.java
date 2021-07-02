@@ -1,8 +1,10 @@
 package com.mercadolibre.dambetan01.model.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum Profile {
 
     SUPERVISOR(1, "Supervisor"),
@@ -11,11 +13,6 @@ public enum Profile {
 
     private Integer code;
     private String description;
-
-    private Profile(Integer code, String description) {
-        this.code = code;
-        this.description = description;
-    }
 
     public static Profile toEnum(Integer code) {
         if (code == null) {

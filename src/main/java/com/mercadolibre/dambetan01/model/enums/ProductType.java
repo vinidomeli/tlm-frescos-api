@@ -1,8 +1,10 @@
 package com.mercadolibre.dambetan01.model.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum ProductType {
 
     REFRIGERATE(1, "Refrigerate"),
@@ -12,11 +14,6 @@ public enum ProductType {
 
     private Integer code;
     private String description;
-
-    private ProductType(Integer code, String description) {
-        this.code = code;
-        this.description = description;
-    }
 
     public static ProductType toEnum(Integer code) {
         if (code == null) {
