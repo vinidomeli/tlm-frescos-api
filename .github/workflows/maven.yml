@@ -17,7 +17,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Clean
+      run: mvn clean
     - name: Build
-      run: mvn -B package --file pom.xml
+      run: mvn package
     - name: Test
       run: mvn test
