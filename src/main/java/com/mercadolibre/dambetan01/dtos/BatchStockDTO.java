@@ -1,4 +1,4 @@
-package com.mercadolibre.dambetan01.dtos.request;
+package com.mercadolibre.dambetan01.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BatchStockRequestDTO {
+public class BatchStockDTO {
 
     @NotNull(message = "Current temperature is required.")
     private Double currentTemperature;

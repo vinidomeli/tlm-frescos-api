@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Getter
@@ -13,6 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SectionRequestDTO {
 
+    @NotNull(message = "Section code is required.")
     private UUID sectionCode;
+
+    @NotNull(message = "Warehouse code is required.")
     private UUID warehouseCode;
 }

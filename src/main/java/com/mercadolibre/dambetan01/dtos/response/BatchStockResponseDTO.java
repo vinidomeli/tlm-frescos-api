@@ -1,22 +1,19 @@
 package com.mercadolibre.dambetan01.dtos.response;
 
-import com.mercadolibre.dambetan01.dtos.request.BatchStockRequestDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BatchStockResponseDTO {
 
-    @NotNull(message = "BatchStock is required.")
-    @Size(min = 1, message = "BatchStock should contain at least 1 batch.")
-    private List<BatchStockRequestDTO> batchStock;
+    private Long orderNumber;
+    private LocalDate orderDate;
+    private List<BatchStockDTO> batchStock;
 }
