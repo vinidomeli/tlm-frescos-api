@@ -4,6 +4,7 @@
 #DB trace
 db/frescos.db.trace.db
 db/frescos.db.mv.db
+db/*
 
 #Mac things
 .DS_Store
