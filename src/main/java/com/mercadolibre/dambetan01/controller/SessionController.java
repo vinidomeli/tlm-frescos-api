@@ -1,12 +1,10 @@
 package com.mercadolibre.dambetan01.controller;
 
+import com.mercadolibre.dambetan01.dtos.AuthDTO;
 import com.mercadolibre.dambetan01.dtos.response.AccountResponseDTO;
 import com.mercadolibre.dambetan01.service.ISessionService;
 import javassist.NotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(path = "/api/v1")
 @RestController
@@ -27,8 +25,8 @@ public class SessionController {
      * @throws NotFoundException
      */
     @PostMapping("/sign-in")
-    public AccountResponseDTO login(@RequestParam("username") String username, @RequestParam("password") String password) throws NotFoundException {
-        return service.login(username, password);
+    public AccountResponseDTO login(@RequestBody AuthDTO credentials) throws NotFoundException {
+        return service.login(credentials.getUsername(), credentials.getPassword());
     }
 
 }

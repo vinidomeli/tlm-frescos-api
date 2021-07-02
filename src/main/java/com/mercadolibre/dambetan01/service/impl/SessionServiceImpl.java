@@ -36,8 +36,12 @@ public class SessionServiceImpl implements ISessionService {
      */
     @Override
     public AccountResponseDTO login(String username, String password) throws ApiException {
-        //Voy a la base de datos y reviso que el usuario y contraseña existan.
-        Account account = accountRepository.findByUsernameAndPassword(username, password);
+        // TODO: DESCOMENTAR A BUSCA POR USUÁRIO NO REPOSITORIO QUANDO ESTIVER PRONTO
+        //Account account = accountRepository.findByUsernameAndPassword(username, password);
+        Account account = Account.builder()
+                .username("teste")
+                .password("teste")
+                .build();
 
         if (account != null) {
             String token = getJWTToken(username);
@@ -59,7 +63,7 @@ public class SessionServiceImpl implements ISessionService {
     private String getJWTToken(String username) {
         String secretKey = "mySecretKey";
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList("ROLE_USER");
+                .commaSeparatedStringToAuthorityList("USER");
         String token = Jwts
                 .builder()
                 .setId("softtekJWT")
