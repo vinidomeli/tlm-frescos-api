@@ -14,7 +14,9 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="dambetan01" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -179,6 +181,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: mysql:mysql-connector-java:8.0.22" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.h2database:h2:1.4.200" level="project" />
+    <orderEntry type="library" name="Maven: org.flywaydb:flyway-core:7.11.0" level="project" />
     <orderEntry type="library" name="Maven: com.fury:furyutils:0.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.12" level="project" />

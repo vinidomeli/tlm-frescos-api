@@ -434,6 +434,12 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- Flyway - for migrations -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>7.11.0</version>
+        </dependency>
         <!-- Fury Utils -->
         <dependency>
             <groupId>com.fury</groupId>
