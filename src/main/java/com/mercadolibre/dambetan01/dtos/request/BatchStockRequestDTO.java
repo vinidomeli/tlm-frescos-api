@@ -10,16 +10,12 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BatchStockRequestDTO {
-
-    private UUID batchNumber;
-    private UUID productId;
 
     @NotNull(message = "Current temperature is required.")
     private Double currentTemperature;
