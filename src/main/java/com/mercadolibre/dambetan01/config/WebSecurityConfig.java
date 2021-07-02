@@ -23,4 +23,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .anyRequest().authenticated();
     }
+
+    /*
+     * remove the comment of the method bellow to view the database structure created in the h2 database
+     */
+    /*
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/h2-console/**").permitAll();
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
+    }
+     */
 }
