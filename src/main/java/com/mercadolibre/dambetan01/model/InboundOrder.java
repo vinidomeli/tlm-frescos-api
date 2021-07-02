@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="inbound_orders")
+@Table(name="InboundOrders")
 @Getter
 @Setter
 @AllArgsConstructor

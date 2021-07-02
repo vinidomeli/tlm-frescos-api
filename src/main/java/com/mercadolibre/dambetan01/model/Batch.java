@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="batches")
+@Table(name="Batch")
 @Getter
 @Setter
 @AllArgsConstructor

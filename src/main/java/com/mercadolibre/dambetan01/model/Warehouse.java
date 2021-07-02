@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name="warehouses")
+@Table(name="Warehouse")
 @Getter
 @Setter
 @AllArgsConstructor
