@@ -8,4 +8,6 @@ import java.util.UUID;
 
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, UUID> {
+
+    public boolean existsByWarehouseCode(UUID warehouseCode);
 }

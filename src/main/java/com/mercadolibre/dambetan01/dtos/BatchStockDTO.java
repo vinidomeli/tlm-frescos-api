@@ -19,7 +19,7 @@ import java.util.UUID;
 public class BatchStockDTO {
 
     @NotNull(message = "Product ID is required.")
-    private UUID productId;
+    private Long productId;
 
     @NotNull(message = "Current temperature is required.")
     private Double currentTemperature;
