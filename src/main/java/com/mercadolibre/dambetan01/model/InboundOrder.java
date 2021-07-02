@@ -6,22 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-@Table(name="accounts")
+@Table(name="inbound_orders")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class InboundOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username, password;
-    private Integer rol;
+    private Long orderNumber;
+    private LocalDate orderDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_country_house_fk", nullable = false)
-    private CountryHouse countryHouse;
+    @ManyToOne
+    @JoinColumn(name = "fk_section")
+    private Section section;
+
 }
