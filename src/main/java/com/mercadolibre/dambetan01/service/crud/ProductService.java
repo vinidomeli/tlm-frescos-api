@@ -9,5 +9,5 @@ import java.util.List;
 public interface ProductService {
 
     public boolean productExists(long productId);
-    public void checkProductIdInsideBatchStock(List<Long> productIDs);
+    public void productIdsInsideBatchStockExist(List<Long> productIDs);
 }

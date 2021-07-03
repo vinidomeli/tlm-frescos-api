@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void checkProductIdInsideBatchStock(List<Long> productIds) {
+    public void productIdsInsideBatchStockExist(List<Long> productIds) {
         productIds.stream()
                 .forEach(productId -> {
                     boolean productDoesntExists = !productExists(productId);

@@ -3,7 +3,7 @@ package com.mercadolibre.dambetan01.controller;
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
-import com.mercadolibre.dambetan01.service.crud.BatchService;
+import com.mercadolibre.dambetan01.service.crud.InboundOrderService;
 import com.mercadolibre.dambetan01.service.crud.ProductService;
 import com.mercadolibre.dambetan01.service.crud.SectionService;
 import com.mercadolibre.dambetan01.service.crud.WarehouseService;
@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/fresh-products")
-public class BatchController {
+public class InboundOrderController {
 
-    BatchService batchService;
+    InboundOrderService inboundOrderService;
     ProductService productService;
     WarehouseService warehouseService;
     SectionService sectionService;
 
-    public BatchController(final BatchService batchService, final ProductService productService,
-                           final WarehouseService warehouseService, final SectionService sectionService) {
-        this.batchService = batchService;
+    public InboundOrderController(final InboundOrderService inboundOrderService, final ProductService productService,
+                                  final WarehouseService warehouseService, final SectionService sectionService) {
+        this.inboundOrderService = inboundOrderService;
         this.productService = productService;
         this.warehouseService = warehouseService;
         this.sectionService = sectionService;
@@ -46,7 +46,7 @@ public class BatchController {
         UUID warehouseCode = inboundOrderRequestDTO.getSection().getWarehouseCode();
         UUID sectionCode = inboundOrderRequestDTO.getSection().getSectionCode();
 
-        productService.checkProductIdInsideBatchStock(productIds);
+        productService.productIdsInsideBatchStockExist(productIds);
         warehouseService.warehouseExists(warehouseCode);
         sectionService.sectionExists(sectionCode);
         sectionService.sectionBelongsToWarehouse(sectionCode, warehouseCode);
@@ -54,14 +54,15 @@ public class BatchController {
         sectionService.sectionHasSuficientSpace(totalInboundOrderSize, sectionCode);
         //validar se o representante pertence ao armazem -> validacao de usuario
 
-        BatchStockResponseDTO response = batchService.registerNewBatch(inboundOrderRequestDTO);
+        //criar servico de registerNewInboundOrder
+        BatchStockResponseDTO response = inboundOrderService.registerNewInboundOrder(inboundOrderRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PutMapping("/inboundorder")
     public ResponseEntity<BatchStockResponseDTO> updateBatch(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
-        BatchStockResponseDTO response = batchService.updateBatch(inboundOrderRequestDTO);
+        BatchStockResponseDTO response = inboundOrderService.updateInboundOrder(inboundOrderRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
