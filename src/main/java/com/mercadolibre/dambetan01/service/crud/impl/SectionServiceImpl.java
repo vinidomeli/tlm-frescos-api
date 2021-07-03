@@ -3,10 +3,12 @@ package com.mercadolibre.dambetan01.service.crud.impl;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.repository.SectionRepository;
 import com.mercadolibre.dambetan01.service.crud.SectionService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class SectionServiceImpl implements SectionService {
 
     SectionRepository sectionRepository;
@@ -51,13 +53,13 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public void sectionHasSuficientSpace(Integer totalInboundOrderSize, UUID sectionCode) {
+    public void sectionHasSufficientSpace(Integer totalInboundOrderSize, UUID sectionCode) {
         Integer sectionLimitSize = sectionRepository.findBySectionCode(sectionCode).getLimitSize();
         Integer sectionCurrentSize = sectionRepository.findBySectionCode(sectionCode).getCurrentSize();
-        Integer remainingSize = sectionLimitSize - sectionCurrentSize;
-        boolean sectionHasntSuficientSpace = remainingSize < totalInboundOrderSize;
-        if(sectionHasntSuficientSpace) {
-            throw new RuntimeException("Section hasn't suficient space");
+        int remainingSize = sectionLimitSize - sectionCurrentSize;
+        boolean sectionHasntSufficientSpace = remainingSize < totalInboundOrderSize;
+        if(sectionHasntSufficientSpace) {
+            throw new RuntimeException("Section hasn't sufficient space");
         }
     }
 }

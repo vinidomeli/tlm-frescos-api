@@ -1,6 +1,5 @@
 package com.mercadolibre.dambetan01.dtos;
 
-import com.mercadolibre.dambetan01.model.Batch;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -8,14 +7,16 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BatchStockDTO {
+public class UpdateBatchStockDTO {
+
+    @NotNull(message = "Batch number is required.")
+    private Long batchNumber;
 
     @NotNull(message = "Product ID is required.")
     private Long productId;

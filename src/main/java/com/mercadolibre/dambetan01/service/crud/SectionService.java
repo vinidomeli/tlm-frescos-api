@@ -8,5 +8,5 @@ public interface SectionService {
     public void sectionExists(UUID sectionCode);
     public void sectionBelongsToWarehouse(UUID sectionCode, UUID warehouseCode);
     public void sectionMatchesProductType(UUID sectionCode, List<Long> productIds);
-    void sectionHasSuficientSpace(Integer totalInboundOrderSize, UUID sectionCode);
+    void sectionHasSufficientSpace(Integer totalInboundOrderSize, UUID sectionCode);
 }

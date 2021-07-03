@@ -2,6 +2,7 @@ package com.mercadolibre.dambetan01;
 
 import com.mercadolibre.dambetan01.config.SpringConfig;
 import com.mercadolibre.dambetan01.util.ScopeUtils;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 

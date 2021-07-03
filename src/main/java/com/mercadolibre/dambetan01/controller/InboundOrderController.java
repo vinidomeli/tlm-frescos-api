@@ -1,12 +1,12 @@
 package com.mercadolibre.dambetan01.controller;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.dtos.UpdateBatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
+import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
-import com.mercadolibre.dambetan01.service.crud.InboundOrderService;
-import com.mercadolibre.dambetan01.service.crud.ProductService;
-import com.mercadolibre.dambetan01.service.crud.SectionService;
-import com.mercadolibre.dambetan01.service.crud.WarehouseService;
+import com.mercadolibre.dambetan01.model.User;
+import com.mercadolibre.dambetan01.service.crud.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,24 +23,37 @@ public class InboundOrderController {
     ProductService productService;
     WarehouseService warehouseService;
     SectionService sectionService;
+    UserService userService;
+    BatchService batchService;
 
     public InboundOrderController(final InboundOrderService inboundOrderService, final ProductService productService,
-                                  final WarehouseService warehouseService, final SectionService sectionService) {
+                                  final WarehouseService warehouseService, final SectionService sectionService,
+                                  final UserService userService, final BatchService batchService) {
         this.inboundOrderService = inboundOrderService;
         this.productService = productService;
         this.warehouseService = warehouseService;
         this.sectionService = sectionService;
+        this.userService = userService;
+        this.batchService = batchService;
+    }
+
+    //testing endpoint
+    @PostMapping("/user")
+    public ResponseEntity<User> registerNewUser(@RequestBody User user) {
+        User response = userService.registerNewUser(user);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PostMapping("/inboundorder")
-    public ResponseEntity<BatchStockResponseDTO> registerNewBatch(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
+    public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
+
         List<Long> productIds = inboundOrderRequestDTO.getBatchStock().stream()
                 .map(BatchStockDTO::getProductId)
                 .collect(Collectors.toList());
 
         Integer totalInboundOrderSize = inboundOrderRequestDTO.getBatchStock().stream()
-                .map(BatchStockDTO::getInitialQuantity)
+                .map(BatchStockDTO::getCurrentQuantity)
                 .reduce(0, Integer::sum);
 
         UUID warehouseCode = inboundOrderRequestDTO.getSection().getWarehouseCode();
@@ -51,18 +64,45 @@ public class InboundOrderController {
         sectionService.sectionExists(sectionCode);
         sectionService.sectionBelongsToWarehouse(sectionCode, warehouseCode);
         sectionService.sectionMatchesProductType(sectionCode, productIds);
-        sectionService.sectionHasSuficientSpace(totalInboundOrderSize, sectionCode);
+        sectionService.sectionHasSufficientSpace(totalInboundOrderSize, sectionCode);
         //validar se o representante pertence ao armazem -> validacao de usuario
 
-        //criar servico de registerNewInboundOrder
         BatchStockResponseDTO response = inboundOrderService.registerNewInboundOrder(inboundOrderRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PutMapping("/inboundorder")
-    public ResponseEntity<BatchStockResponseDTO> updateBatch(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
-        BatchStockResponseDTO response = inboundOrderService.updateInboundOrder(inboundOrderRequestDTO);
+    public ResponseEntity<BatchStockResponseDTO> updateInboundOrder(@RequestBody UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
+
+        List<Long> productIds = updateInboundOrderRequestDTO.getBatchStock().stream()
+                .map(UpdateBatchStockDTO::getProductId)
+                .collect(Collectors.toList());
+
+        List<Long> batchNumbers = updateInboundOrderRequestDTO.getBatchStock().stream()
+                .map(UpdateBatchStockDTO::getBatchNumber)
+                .collect(Collectors.toList());
+
+        Integer totalInboundOrderSize = updateInboundOrderRequestDTO.getBatchStock().stream()
+                .map(UpdateBatchStockDTO::getCurrentQuantity)
+                .reduce(0, Integer::sum);
+
+        UUID warehouseCode = updateInboundOrderRequestDTO.getSection().getWarehouseCode();
+        UUID sectionCode = updateInboundOrderRequestDTO.getSection().getSectionCode();
+        Long orderNumber = updateInboundOrderRequestDTO.getOrderNumber();
+
+
+        inboundOrderService.orderNumberExists(orderNumber);
+        inboundOrderService.inboundOrderContainsSectionCode(orderNumber, sectionCode);
+        sectionService.sectionExists(sectionCode);
+        warehouseService.warehouseExists(warehouseCode);
+        sectionService.sectionBelongsToWarehouse(sectionCode, warehouseCode);
+        sectionService.sectionMatchesProductType(sectionCode, productIds);
+        sectionService.sectionHasSufficientSpace(totalInboundOrderSize, sectionCode);
+        batchService.batchNumbersExist(batchNumbers);
+        inboundOrderService.inboundOrderContainsBatchNumbers(orderNumber, batchNumbers);
+
+        BatchStockResponseDTO response = inboundOrderService.updateInboundOrder(updateInboundOrderRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

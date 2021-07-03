@@ -5,9 +5,11 @@ import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.model.Product;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.service.crud.ProductService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     ProductRepository productRepository;
