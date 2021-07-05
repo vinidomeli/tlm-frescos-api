@@ -14,7 +14,7 @@ CREATE TABLE Seller (
 );
 
 CREATE TABLE Product (
-                         productId INTEGER PRIMARY KEY,
+                         id INTEGER PRIMARY KEY,
                          type VARCHAR(50),
                          fk_seller VARCHAR(18),
                          FOREIGN KEY (fk_seller) REFERENCES Seller(CNPJ)
@@ -62,6 +62,6 @@ CREATE TABLE Batch (
                        dueDate DATE,
                        fk_product INTEGER,
                        fk_inboundOrder INTEGER,
-                       FOREIGN KEY (fk_product) REFERENCES Product(productId),
+                       FOREIGN KEY (fk_product) REFERENCES Product(id),
                        FOREIGN KEY (fk_inboundOrder) REFERENCES InboundOrder(orderNumber)
 );
