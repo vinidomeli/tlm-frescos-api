@@ -19,8 +19,6 @@ public class SessionController {
      * Realiza la validación del usuario y contraseña ingresado.
      * En caso de ser correcto, devuelve la cuenta con el token necesario para realizar las demás consultas.
      *
-     * @param username
-     * @param password
      * @return
      * @throws NotFoundException
      */
