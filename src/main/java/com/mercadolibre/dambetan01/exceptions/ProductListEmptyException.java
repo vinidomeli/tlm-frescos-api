@@ -2,8 +2,8 @@ package com.mercadolibre.dambetan01.exceptions;
 
 public class ProductListEmptyException extends RuntimeException {
 
-    public ProductListEmptyException(String msg) {
-        super(msg);
+    public ProductListEmptyException() {
+        super("Product's list is empty.");
     }
 
 //    public ProductListEmptyException(String msg, Throwable cause) {
