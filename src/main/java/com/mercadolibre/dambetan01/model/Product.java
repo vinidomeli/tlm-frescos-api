@@ -24,4 +24,6 @@ public class Product {
     @JoinColumn(name = "fk_seller", referencedColumnName = "cnpj")
     private Seller seller;
 
+    private Double price;
+
 }
