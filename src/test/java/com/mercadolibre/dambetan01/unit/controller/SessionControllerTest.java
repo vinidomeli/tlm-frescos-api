@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 class SessionControllerTest {
-/*
+
     SessionController controller;
     ISessionService service = Mockito.mock(ISessionService.class);
 
@@ -26,7 +26,7 @@ class SessionControllerTest {
                 .thenReturn(new AccountResponseDTO("user_one", "contra123", "TOKEN"));
         controller = new SessionController(service);
     }
-
+/*
     @Test
     void loginFail() throws Exception {
         assertThrows(ApiException.class, () -> controller.login("user_one","contra12"),

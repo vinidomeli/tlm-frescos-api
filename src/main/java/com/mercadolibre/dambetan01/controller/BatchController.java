@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/fresh-products")
 public class BatchController {
-/*
+
     BatchService batchService;
 
     public BatchController(BatchService batchService) {
@@ -29,5 +29,5 @@ public class BatchController {
     public ResponseEntity<BatchStockResponseDTO> updateBatch(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
         BatchStockResponseDTO response = batchService.updateBatch(inboundOrderRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }*/
+    }
 }
