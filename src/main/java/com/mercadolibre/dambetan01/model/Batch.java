@@ -1,5 +1,6 @@
 package com.mercadolibre.dambetan01.model;
 
+import com.mercadolibre.dambetan01.model.enums.ProductType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class Batch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchNumber;
-    private String productType;
+    private ProductType productType;
 
     @ManyToOne
     @JoinColumn(name = "fk_product", referencedColumnName = "productId")
