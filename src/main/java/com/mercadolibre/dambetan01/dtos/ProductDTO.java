@@ -1,4 +1,4 @@
-package com.mercadolibre.dambetan01.dtos.request;
+package com.mercadolibre.dambetan01.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
