@@ -2,6 +2,7 @@ package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
+import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Product;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.service.crud.ProductService;
@@ -29,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
                 .forEach(productId -> {
                     boolean productDoesntExists = !productExists(productId);
                     if(productDoesntExists) {
-                        throw new RuntimeException("Product Doesn't exists");
+                        throw new ApiException("404", "Product Doesn't exists", 404);
                     }
                 });
     }

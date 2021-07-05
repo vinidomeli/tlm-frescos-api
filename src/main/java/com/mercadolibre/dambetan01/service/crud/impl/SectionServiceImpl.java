@@ -30,7 +30,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public void sectionBelongsToWarehouse(UUID sectionCode, UUID warehouseCode) {
-        boolean sectionDoesntBelongsToWarehouse = sectionRepository.findBySectionCode(sectionCode)
+        boolean sectionDoesntBelongsToWarehouse = !sectionRepository.findBySectionCode(sectionCode)
                 .getWarehouse()
                 .getWarehouseCode()
                 .equals(warehouseCode);
@@ -46,9 +46,9 @@ public class SectionServiceImpl implements SectionService {
                 .map(productId -> productRepository.findById(productId).get().getType())
                 .forEach(productType -> {
                     String sectionType = sectionRepository.findBySectionCode(sectionCode).getProductType();
-                    boolean sectionDoesntMatchesProductType = sectionType.equals(productType);
+                    boolean sectionDoesntMatchesProductType = !sectionType.equals(productType);
                     if(sectionDoesntMatchesProductType) {
-                        throw new RuntimeException("Section doesn't matches product type");
+                        throw new ApiException("404", "Section doesn't matches product type", 404);
                     }
                 });
     }
@@ -60,7 +60,7 @@ public class SectionServiceImpl implements SectionService {
         int remainingSize = sectionLimitSize - sectionCurrentSize;
         boolean sectionHasntSufficientSpace = remainingSize < totalInboundOrderSize;
         if(sectionHasntSufficientSpace) {
-            throw new RuntimeException("Section hasn't sufficient space");
+            throw new ApiException("404", "Section hasn't sufficient space", 404);
         }
     }
 }

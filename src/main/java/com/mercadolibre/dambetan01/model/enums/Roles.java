@@ -5,21 +5,21 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Profile {
+public enum Roles {
 
-    SUPERVISOR(1, "Supervisor"),
-    SELLER(2, "Seller"),
-    BUYER(3, "Buyer");
+    SUPERVISOR("Supervisor", 1),
+    SELLER("Seller", 2),
+    BUYER("Buyer", 3);
 
-    private Integer code;
     private String description;
+    private Integer code;
 
-    public static Profile toEnum(Integer code) {
+    public static Roles toEnum(Integer code) {
         if (code == null) {
             return null;
         }
 
-        for (Profile profile : Profile.values()) {
+        for (Roles profile : Roles.values()) {
             if (code.equals(profile.getCode())) {
                 return profile;
             }

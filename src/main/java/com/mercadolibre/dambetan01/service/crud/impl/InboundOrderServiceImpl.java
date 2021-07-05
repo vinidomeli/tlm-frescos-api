@@ -37,14 +37,15 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     public BatchStockResponseDTO registerNewInboundOrder(InboundOrderRequestDTO inboundOrderRequestDTO) {
 
         InboundOrder inboundOrder = inboundOrderRequestDTOToInboundOrder(inboundOrderRequestDTO);
+        InboundOrder registeredInboundOrder = inboundOrderRepository.save(inboundOrder);
 
         inboundOrderRequestDTO.getBatchStock()
                 .forEach(batchStockDTO -> {
-                    Batch batch = batchServiceImpl.convertBatchStockDTOToBatch(batchStockDTO, inboundOrder.getOrderNumber());
+                    Batch batch = batchServiceImpl.convertBatchStockDTOToBatch(batchStockDTO, registeredInboundOrder.getOrderNumber());
                     batchRepository.save(batch);
                 });
 
-        return inboundOrderToBatchStockResponseDTO(inboundOrder);
+        return inboundOrderToBatchStockResponseDTO(registeredInboundOrder);
     }
 
     @Override

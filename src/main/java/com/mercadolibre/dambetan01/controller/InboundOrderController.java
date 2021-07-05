@@ -38,7 +38,7 @@ public class InboundOrderController {
     }
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
-    @PostMapping(value = "/inboundorder", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/inboundorder")
     public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
 
         List<Long> productIds = inboundOrderRequestDTO.getBatchStock().stream()
