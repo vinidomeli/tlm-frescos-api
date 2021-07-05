@@ -1,5 +1,6 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
+import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.repository.SectionRepository;
 import com.mercadolibre.dambetan01.service.crud.SectionService;
@@ -34,7 +35,7 @@ public class SectionServiceImpl implements SectionService {
                 .getWarehouseCode()
                 .equals(warehouseCode);
         if(sectionDoesntBelongsToWarehouse) {
-            throw new RuntimeException("Section doesn't belongs to warehouse");
+            throw new ApiException("404", "Section doesn't belongs to warehouse", 404);
         }
     }
 
@@ -42,7 +43,7 @@ public class SectionServiceImpl implements SectionService {
     public void sectionMatchesProductType(UUID sectionCode, List<Long> productIds) {
 
         productIds.stream()
-                .map(productId -> productRepository.findByProductId(productId).getType())
+                .map(productId -> productRepository.findById(productId).get().getType())
                 .forEach(productType -> {
                     String sectionType = sectionRepository.findBySectionCode(sectionCode).getProductType();
                     boolean sectionDoesntMatchesProductType = sectionType.equals(productType);

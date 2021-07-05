@@ -8,9 +8,11 @@ import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
 import com.mercadolibre.dambetan01.model.User;
 import com.mercadolibre.dambetan01.service.crud.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,29 +25,20 @@ public class InboundOrderController {
     ProductService productService;
     WarehouseService warehouseService;
     SectionService sectionService;
-    UserService userService;
     BatchService batchService;
 
     public InboundOrderController(final InboundOrderService inboundOrderService, final ProductService productService,
                                   final WarehouseService warehouseService, final SectionService sectionService,
-                                  final UserService userService, final BatchService batchService) {
+                                  final BatchService batchService) {
         this.inboundOrderService = inboundOrderService;
         this.productService = productService;
         this.warehouseService = warehouseService;
         this.sectionService = sectionService;
-        this.userService = userService;
         this.batchService = batchService;
     }
 
-    //testing endpoint
-    @PostMapping("/user")
-    public ResponseEntity<User> registerNewUser(@RequestBody User user) {
-        User response = userService.registerNewUser(user);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
     //    ml-insert-batch-in-fulfillment-warehouse-01
-    @PostMapping("/inboundorder")
+    @PostMapping(value = "/inboundorder", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestBody InboundOrderRequestDTO inboundOrderRequestDTO) {
 
         List<Long> productIds = inboundOrderRequestDTO.getBatchStock().stream()

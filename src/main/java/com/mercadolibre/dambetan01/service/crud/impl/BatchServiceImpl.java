@@ -29,7 +29,7 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch convertBatchStockDTOToBatch(BatchStockDTO batchStockDTO, Long inboundOrderNumber) {
 
-        Product product = productRepository.findByProductId(batchStockDTO.getProductId());
+        Product product = productRepository.findById(batchStockDTO.getProductId()).get();
         InboundOrder inboundOrder = inboundOrderRepository.findByOrderNumber(inboundOrderNumber);
 
         return Batch.builder()
@@ -49,7 +49,7 @@ public class BatchServiceImpl implements BatchService {
     public BatchStockDTO convertBatchToBatchStockDTO(Batch batch) {
 
         return BatchStockDTO.builder()
-                .productId(batch.getProduct().getProductId())
+                .productId(batch.getProduct().getId())
                 .currentTemperature(batch.getCurrentTemperature())
                 .minimumTemperature(batch.getMinimumTemperature())
                 .initialQuantity(batch.getInitialQuantity())

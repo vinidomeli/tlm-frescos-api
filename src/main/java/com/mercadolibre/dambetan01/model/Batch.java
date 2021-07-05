@@ -21,7 +21,7 @@ public class Batch {
     private String productType;
 
     @ManyToOne
-    @JoinColumn(name = "fk_product", referencedColumnName = "productId")
+    @JoinColumn(name = "fk_product", referencedColumnName = "id")
     private Product product;
 
     @ManyToOne

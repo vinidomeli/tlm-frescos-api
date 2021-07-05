@@ -17,11 +17,11 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long id;
     private String type;
 
     @ManyToOne
-    @JoinColumn(name = "fk_seller", referencedColumnName = "cnpj")
+    @JoinColumn(name = "fk_seller", referencedColumnName = "CNPJ")
     private Seller seller;
 
 }

@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean productExists(long productId) {
-        return productRepository.existsByProductId(productId);
+        return productRepository.findById(productId).isPresent();
     }
 
     @Override
