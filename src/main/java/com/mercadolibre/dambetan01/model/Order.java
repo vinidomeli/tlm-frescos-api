@@ -16,7 +16,7 @@ import java.util.List;
 public class Order {
 
     @Id
-    private Long orderId;
+    private Long id;
     private LocalDate date;
     private String orderStatus;
 
