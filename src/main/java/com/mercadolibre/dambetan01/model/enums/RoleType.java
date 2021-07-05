@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Profile {
+public enum RoleType {
 
     SUPERVISOR(1, "Supervisor"),
     SELLER(2, "Seller"),
@@ -14,12 +14,12 @@ public enum Profile {
     private Integer code;
     private String description;
 
-    public static Profile toEnum(Integer code) {
+    public static RoleType toEnum(Integer code) {
         if (code == null) {
             return null;
         }
 
-        for (Profile profile : Profile.values()) {
+        for (RoleType profile : RoleType.values()) {
             if (code.equals(profile.getCode())) {
                 return profile;
             }
