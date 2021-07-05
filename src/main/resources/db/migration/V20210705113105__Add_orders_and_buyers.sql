@@ -11,6 +11,6 @@ CREATE TABLE Order (
 );
 
 CREATE TABLE product_order (
-                       FOREIGN KEY (fk_order) REFERENCES Order(orderId),
-                       FOREIGN KEY (fk_product) REFERENCES Product(productId)
+                       FOREIGN KEY (fk_order) REFERENCES Order(id),
+                       FOREIGN KEY (fk_product) REFERENCES Product(id)
 );
