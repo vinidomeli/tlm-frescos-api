@@ -31,7 +31,7 @@ public class PurchaseController {
     }
 
     // ml-add-product ts-to-cart-01
-
+    //[REQ-02] GET: Complete list of products by type
     //@PreAuthorize("hasAnyRole('BUYER')")
     @GetMapping("/")
     public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam(required = true) ProductType productType) {
