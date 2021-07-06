@@ -63,6 +63,16 @@ class UserServiceImplTest {
     @ParameterizedTest
     @MethodSource("userDataProvider")
     void createANewUser(UserDTO userDTO) {
+        User user = User.builder()
+                .name(userDTO.getName())
+                .role(userDTO.getRole())
+                .login(userDTO.getLogin())
+                .build();
+
+        when(userRepository.save(any())).thenReturn(user);
+        when(userRepository.findByLogin(any())).thenReturn(Optional.empty());
+
+        assertEquals(UserDTO.fromEntity(user), userService.create(userDTO));
     }
 
     @ParameterizedTest
@@ -75,10 +85,6 @@ class UserServiceImplTest {
         assertThrows(ApiException.class, () -> {
             userService.create(userDTO);
         });
-    }
-
-    @Test
-    void existsByLogin() {
     }
 
 }
