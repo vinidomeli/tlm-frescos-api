@@ -1,10 +1,6 @@
 package com.mercadolibre.dambetan01.model;
 
-import com.mercadolibre.dambetan01.model.enums.ProductType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,15 +12,16 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Batch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchNumber;
-    private ProductType productType;
+    private String productType;
 
     @ManyToOne
-    @JoinColumn(name = "fk_product", referencedColumnName = "productId")
+    @JoinColumn(name = "fk_product", referencedColumnName = "id")
     private Product product;
 
     @ManyToOne
