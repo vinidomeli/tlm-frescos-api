@@ -2,77 +2,48 @@ package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.github.javafaker.Faker;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
-import com.mercadolibre.dambetan01.model.Seller;
-import com.mercadolibre.dambetan01.model.Warehouse;
-import com.mercadolibre.dambetan01.model.enums.Roles;
-import com.mercadolibre.dambetan01.repository.SellerRepository;
-import com.mercadolibre.dambetan01.repository.SupervisorRepository;
-import com.mercadolibre.dambetan01.repository.UserRepository;
 import com.mercadolibre.dambetan01.repository.WarehouseRepository;
-import com.mercadolibre.dambetan01.service.crud.WarehouseService;
-import com.mercadolibre.dambetan01.util.ProductDB;
-import com.mercadolibre.dambetan01.util.UserDB;
-import com.mercadolibre.dambetan01.util.WarehouseDB;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class WarehouseServiceImplTest {
 
-    @Autowired
+    @Mock
     WarehouseRepository warehouseRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    @InjectMocks
+    WarehouseServiceImpl warehouseService;
 
-    @Autowired
-    SellerRepository sellerRepository;
-
-    @Autowired
-    SupervisorRepository supervisorRepository;
-
-    @Autowired
-    WarehouseService warehouseService;
-
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     @Test
-    void warehouseExists() {
-        Long supervisorId = insertASupervisorAndGetId();
+    void warehouseCodeThatExistsTest() {
+        UUID newWarehouseCode = UUID.fromString(faker.internet().uuid());
 
-        UUID warehouseId = insertAWarehouseGiven(supervisorId);
-
+        when(warehouseRepository.existsByWarehouseCode(any())).thenReturn(true);
         assertDoesNotThrow(() -> {
-            warehouseService.warehouseExists(warehouseId);
+            warehouseService.warehouseExists(newWarehouseCode);
         });
     }
 
     @Test
-    void warehouseThatDoesntExists() {
-        UUID fakeWarehouseId = UUID.fromString(faker.internet().uuid());
+    void warehouseCodeDoesntExistsTest() {
+        UUID registeredWarehouseCode = UUID.fromString(faker.internet().uuid());
 
+        when(warehouseRepository.existsByWarehouseCode(any())).thenReturn(false);
         assertThrows(ApiException.class, () -> {
-            warehouseService.warehouseExists(fakeWarehouseId);
+            warehouseService.warehouseExists(registeredWarehouseCode);
         });
-    }
-
-    public Long insertASupervisorAndGetId(){
-        UserDB userDB = new UserDB(userRepository, sellerRepository, supervisorRepository);
-        return userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
-    }
-
-    public UUID insertAWarehouseGiven(Long supervisorId){
-        WarehouseDB warehouseDB = new WarehouseDB(warehouseRepository, supervisorRepository);
-        return warehouseDB.insertWarehouse(supervisorId);
     }
 }
