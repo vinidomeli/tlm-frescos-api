@@ -18,10 +18,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
                 .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                 .antMatchers(HttpMethod.GET, "/fake").permitAll()
-
                 .anyRequest().authenticated();
     }
 
