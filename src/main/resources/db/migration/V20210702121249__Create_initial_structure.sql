@@ -14,7 +14,7 @@ CREATE TABLE Seller (
 );
 
 CREATE TABLE Product (
-                         id INTEGER PRIMARY KEY,
+                         id INTEGER PRIMARY KEY AUTO_INCREMENT,
                          type VARCHAR(50),
                          price DOUBLE,
                          fk_seller VARCHAR(18),
@@ -22,7 +22,7 @@ CREATE TABLE Product (
 );
 
 CREATE TABLE Supervisor (
-                            registerNumber VARCHAR(18) PRIMARY KEY,
+                            registerNumber INTEGER PRIMARY KEY AUTO_INCREMENT,
                             fk_user BINARY(16),
                             FOREIGN KEY (fk_user) REFERENCES User(id)
 );
@@ -45,14 +45,14 @@ CREATE TABLE Section (
 );
 
 CREATE TABLE InboundOrder (
-                              orderNumber INTEGER PRIMARY KEY,
+                              orderNumber INTEGER PRIMARY KEY AUTO_INCREMENT,
                               orderDate DATE,
                               fk_section BINARY(16),
                               FOREIGN KEY (fk_section) REFERENCES Section(sectionCode)
 );
 
 CREATE TABLE Batch (
-                       batchNumber INTEGER PRIMARY KEY,
+                       batchNumber INTEGER PRIMARY KEY AUTO_INCREMENT,
                        productType VARCHAR(50),
                        initialQuantity INTEGER,
                        currentQuantity INTEGER,

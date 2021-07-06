@@ -1,5 +1,6 @@
 package com.mercadolibre.dambetan01.dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import lombok.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class BatchStockResponseDTO {
 
     private Long orderNumber;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
     private List<BatchStockDTO> batchStock;
 }

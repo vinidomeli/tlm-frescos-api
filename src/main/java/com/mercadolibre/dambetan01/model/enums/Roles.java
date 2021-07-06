@@ -7,12 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Roles {
 
-    SUPERVISOR(1, "Supervisor"),
-    SELLER(2, "Seller"),
-    BUYER(3, "Buyer");
+    SUPERVISOR("Supervisor", 1),
+    SELLER("Seller", 2),
+    BUYER("Buyer", 3);
 
-    private Integer code;
     private String description;
+    private Integer code;
 
     public static Roles toEnum(Integer code) {
         if (code == null) {
@@ -34,7 +34,6 @@ public enum Roles {
                 return profile;
             }
         }
-
         throw new IllegalArgumentException("Invalid role: " + description);
     }
 }

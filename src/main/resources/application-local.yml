@@ -14,7 +14,13 @@ spring:
       path: /h2-console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  spring:
+    jackson:
+      serialization:
+        WRITE_DATES_AS_TIMESTAMPS: false
 
 server:
   port: 8082
