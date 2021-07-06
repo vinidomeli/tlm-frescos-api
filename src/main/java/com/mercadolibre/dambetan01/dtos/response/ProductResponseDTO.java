@@ -1,6 +1,5 @@
 package com.mercadolibre.dambetan01.dtos.response;
 
-import com.mercadolibre.dambetan01.model.enums.ProductType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class ProductResponseDTO {
 
     private Long id;
-    private ProductType type;
+    private String type;
     private Double price;
 }

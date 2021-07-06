@@ -52,7 +52,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     //[REQ-02] GET: Complete list of products by type
     @Override
-    public List<ProductResponseDTO> listProductsByCategory(ProductType productType) {
+    public List<ProductResponseDTO> listProductsByCategory(String productType) {
         List<ProductResponseDTO> productsTypeList = productRepository.findProductByType(productType)
                 .stream()
                 .map(product -> modelMapper.map(product, ProductResponseDTO.class))

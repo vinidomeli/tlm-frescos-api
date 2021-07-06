@@ -2,14 +2,10 @@ package com.mercadolibre.dambetan01.unit.service;
 
 import com.mercadolibre.dambetan01.dtos.request.OrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductResponseDTO;
-import com.mercadolibre.dambetan01.model.Product;
-import com.mercadolibre.dambetan01.model.Seller;
-import com.mercadolibre.dambetan01.model.enums.ProductType;
 import com.mercadolibre.dambetan01.repository.OrderRepository;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.service.crud.impl.PurchaseServiceImpl;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
@@ -50,13 +46,10 @@ public class PurchaseServiceImplTest {
     @Test
     public void shouldReturnListOfProducts() {
         List<ProductResponseDTO> productList = new ArrayList<>();
-        //Seller seller = new Seller();
-        //seller.setCnpj("25.928.839/0001-15");
-        productList.add(new ProductResponseDTO(1L, ProductType.REFRIGERATE, 232.00));
-        productList.add(new ProductResponseDTO(2L, ProductType.DRINKS, 100.00));
+        productList.add(new ProductResponseDTO(1L, "Refrigerate", 595.35));
+        productList.add(new ProductResponseDTO(2L, "Refrigerate", 535.96));
         //when(productRepository.findAll()).thenReturn(productList);
         List<ProductResponseDTO> productResponseDTO = purchaseService.listAllProducts();
         assertEquals(productList, productResponseDTO);
     }
-
 }

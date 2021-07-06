@@ -35,7 +35,7 @@ public class PurchaseController {
     //[REQ-02] GET: Complete list of products by type
     //@PreAuthorize("hasAnyRole('BUYER')")
     @GetMapping("/list")
-    public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam(required = true) ProductType productType) {
+    public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam(required = true) String productType) {
         List<ProductResponseDTO> productsType = purchaseService.listProductsByCategory(productType);
         return new ResponseEntity<>(productsType, HttpStatus.OK);
     }
