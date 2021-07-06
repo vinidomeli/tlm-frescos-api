@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import com.mercadolibre.dambetan01.model.Warehouse;
 import com.mercadolibre.dambetan01.repository.SupervisorRepository;
 import com.mercadolibre.dambetan01.repository.WarehouseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
