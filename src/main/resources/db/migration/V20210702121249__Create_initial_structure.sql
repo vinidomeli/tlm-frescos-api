@@ -16,6 +16,7 @@ CREATE TABLE Seller (
 CREATE TABLE Product (
                          id INTEGER PRIMARY KEY,
                          type VARCHAR(50),
+                         price DOUBLE,
                          fk_seller VARCHAR(18),
                          FOREIGN KEY (fk_seller) REFERENCES Seller(CNPJ)
 );
