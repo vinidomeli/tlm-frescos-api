@@ -1,10 +1,6 @@
 package com.mercadolibre.dambetan01.model;
 
-import com.mercadolibre.dambetan01.model.enums.ProductType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,15 +10,16 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
-    private ProductType type;
+    private Long id;
+    private String type;
 
     @ManyToOne
-    @JoinColumn(name = "fk_seller", referencedColumnName = "cnpj")
+    @JoinColumn(name = "fk_seller", referencedColumnName = "CNPJ")
     private Seller seller;
 
     private Double price;
