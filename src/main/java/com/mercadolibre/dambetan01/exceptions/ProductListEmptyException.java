@@ -6,7 +6,7 @@ public class ProductListEmptyException extends RuntimeException {
         super("Product's list is empty.");
     }
 
-//    public ProductListEmptyException(String msg, Throwable cause) {
-//        super(msg, cause);
-//    }
+    public ProductListEmptyException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

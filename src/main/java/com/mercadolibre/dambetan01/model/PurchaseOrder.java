@@ -9,13 +9,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name="Order")
+@Table(name="PurchaseOrder")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class PurchaseOrder {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
     private String orderStatus;
@@ -25,10 +26,10 @@ public class Order {
     private Buyer buyer;
 
     @ManyToMany
-    @JoinTable(name = "product_order", joinColumns = {
-            @JoinColumn(name = "order_id")
+    @JoinTable(name = "ProductOrder", joinColumns = {
+            @JoinColumn(name = "purchaseOrderId")
     }, inverseJoinColumns = {
-            @JoinColumn(name = "product_id")
+            @JoinColumn(name = "productId")
     })
     private List<Product> products;
 }
