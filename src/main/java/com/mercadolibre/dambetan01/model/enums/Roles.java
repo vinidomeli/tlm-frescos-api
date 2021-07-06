@@ -25,6 +25,15 @@ public enum Roles {
             }
         }
 
-        throw new IllegalArgumentException("Profile not valid: " + code);
+        throw new IllegalArgumentException("Invalid role: " + code);
+    }
+
+    public static Roles toEnum(String description) {
+        for (Roles profile : Roles.values()) {
+            if (description.equals(profile.getDescription())) {
+                return profile;
+            }
+        }
+        throw new IllegalArgumentException("Invalid role: " + description);
     }
 }

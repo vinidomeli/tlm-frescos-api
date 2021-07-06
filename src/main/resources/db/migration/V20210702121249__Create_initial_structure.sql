@@ -3,7 +3,7 @@ CREATE TABLE User (
                       role VARCHAR(50),
                       name VARCHAR(100),
                       login VARCHAR(50),
-                      password VARCHAR(50)
+                      password VARCHAR(100)
 );
 
 CREATE TABLE Seller (
@@ -16,6 +16,7 @@ CREATE TABLE Seller (
 CREATE TABLE Product (
                          id INTEGER PRIMARY KEY AUTO_INCREMENT,
                          type VARCHAR(50),
+                         price DOUBLE,
                          fk_seller VARCHAR(18),
                          FOREIGN KEY (fk_seller) REFERENCES Seller(CNPJ)
 );

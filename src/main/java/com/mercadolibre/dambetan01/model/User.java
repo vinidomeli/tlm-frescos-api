@@ -1,6 +1,5 @@
 package com.mercadolibre.dambetan01.model;
 
-import com.mercadolibre.dambetan01.model.enums.Roles;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -11,9 +10,9 @@ import java.util.UUID;
 @Table(name="User")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class User {
 
     @Id

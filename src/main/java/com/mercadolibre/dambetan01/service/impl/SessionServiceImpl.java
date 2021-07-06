@@ -3,7 +3,9 @@ package com.mercadolibre.dambetan01.service.impl;
 import com.mercadolibre.dambetan01.dtos.response.AccountResponseDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Account;
+import com.mercadolibre.dambetan01.model.User;
 import com.mercadolibre.dambetan01.repository.AccountRepository;
+import com.mercadolibre.dambetan01.repository.UserRepository;
 import com.mercadolibre.dambetan01.service.ISessionService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javassist.NotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,34 +24,30 @@ import java.util.stream.Collectors;
 public class SessionServiceImpl implements ISessionService {
     private final AccountRepository accountRepository;
 
-    public SessionServiceImpl(AccountRepository accountRepository) {
+    private final UserRepository userRepository;
+
+    public SessionServiceImpl(AccountRepository accountRepository, UserRepository userRepository) {
         this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
     }
 
-    /**
-     * Realiza la validación del usuario y contraseña ingresado.
-     * En caso de ser correcto, devuelve la cuenta con el token necesario para realizar las demás consultas.
-     *
-     * @param username
-     * @param password
-     * @return
-     * @throws NotFoundException
-     */
     @Override
-    public AccountResponseDTO login(String username, String password) throws ApiException {
-        //Voy a la base de datos y reviso que el usuario y contraseña existan.
-        Account account = accountRepository.findByUsernameAndPassword(username, password);
+    public AccountResponseDTO login(String login, String password) throws ApiException {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new ApiException("404", "Usuario e/ou senha invalido(os).", 404));
 
-        if (account != null) {
-            String token = getJWTToken(username);
-            AccountResponseDTO user = new AccountResponseDTO();
-            user.setUsername(username);
-            user.setToken(token);
-            return user;
-        } else {
-            throw new ApiException("404", "Usuario y/o contraseña incorrecto", 404);
+        boolean validPassword = BCrypt.checkpw(password, user.getPassword());
+
+        if (!validPassword) {
+            throw new ApiException("404", "Usuario e/ou senha invalido(os).", 404);
         }
 
+        String token = getJWTToken(login, user.getRole());
+
+        return AccountResponseDTO.builder()
+                .username(login)
+                .token(token)
+                .build();
     }
 
     /**
@@ -56,10 +55,10 @@ public class SessionServiceImpl implements ISessionService {
      * @param username
      * @return
      */
-    private String getJWTToken(String username) {
+    private String getJWTToken(String username, String role) {
         String secretKey = "mySecretKey";
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList("ROLE_USER");
+                .commaSeparatedStringToAuthorityList("USER_"+role.toUpperCase());
         String token = Jwts
                 .builder()
                 .setId("softtekJWT")
