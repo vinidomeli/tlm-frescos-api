@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.controller;
 
 import com.mercadolibre.dambetan01.dtos.response.ProductResponseDTO;
+import com.mercadolibre.dambetan01.dtos.response.PurchaseOrderDetailDTO;
 import com.mercadolibre.dambetan01.model.enums.ProductType;
 import com.mercadolibre.dambetan01.service.crud.PurchaseService;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,18 @@ public class PurchaseController {
     // ml-add-product ts-to-cart-01
     //[REQ-02] GET: Complete list of products by type
     //@PreAuthorize("hasAnyRole('BUYER')")
-    @GetMapping("/")
+    @GetMapping("/list")
     public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam(required = true) ProductType productType) {
         List<ProductResponseDTO> productsType = purchaseService.listProductsByCategory(productType);
         return new ResponseEntity<>(productsType, HttpStatus.OK);
+    }
+
+    // ml-add-product ts-to-cart-01
+    //[REQ-02] GET: List of purchase order products
+    //@PreAuthorize("hasAnyRole('BUYER')")
+    @GetMapping("/order")
+    public ResponseEntity<List<PurchaseOrderDetailDTO>> listOrderProducts(@RequestParam(required = true) Long orderId) {
+        List<PurchaseOrderDetailDTO> purchaseOrderDetails = purchaseService.listOrderProducts(orderId);
+        return new ResponseEntity<>(purchaseOrderDetails, HttpStatus.OK);
     }
 }
