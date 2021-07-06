@@ -3,7 +3,7 @@ CREATE TABLE User (
                       role VARCHAR(50),
                       name VARCHAR(100),
                       login VARCHAR(50),
-                      password VARCHAR(50)
+                      password VARCHAR(100)
 );
 
 CREATE TABLE Seller (
