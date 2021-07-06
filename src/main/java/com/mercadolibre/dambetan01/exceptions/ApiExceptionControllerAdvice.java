@@ -20,6 +20,17 @@ public class ApiExceptionControllerAdvice {
 
     @ExceptionHandler
     @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public List<ValidationError> handleException(MethodArgumentNotValidException ex) {
+        logger.info("Validation Error");
+        return ex.getBindingResult().getAllErrors()
+                .stream()
+                .map(this::mapError)
+                .collect(Collectors.toList());
+    }
+
+    @ExceptionHandler
+    @ResponseBody
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleException(Exception ex) {
 
@@ -50,19 +61,6 @@ public class ApiExceptionControllerAdvice {
                 ex.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value()
         );
-    }
-
-
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<ValidationError> handleException(MethodArgumentNotValidException ex) {
-        logger.info("Error de validacion");
-        return ex.getBindingResult().getAllErrors()
-                .stream()
-                .map(this::mapError)
-                .collect(Collectors.toList());
     }
 
     private ValidationError mapError(ObjectError objectError) {

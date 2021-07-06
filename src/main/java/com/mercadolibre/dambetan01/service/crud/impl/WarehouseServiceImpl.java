@@ -1,5 +1,6 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
+import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.repository.WarehouseRepository;
 import com.mercadolibre.dambetan01.service.crud.WarehouseService;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         boolean warehouseCodeDoesntExists = !warehouseRepository.existsByWarehouseCode(warehouseCode);
 
         if(warehouseCodeDoesntExists) {
-            throw new RuntimeException("Warehouse Code coesn't exists");
+            throw new ApiException("404", "Warehouse Code doesn't exists", 404);
         }
     }
 

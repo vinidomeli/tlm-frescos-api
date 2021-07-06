@@ -10,7 +10,6 @@ import java.util.UUID;
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, UUID> {
 
-    @Query(value = "SELECT CASE WHEN COUNT(w.warehouseCode) > 0 THEN TRUE ELSE FALSE END FROM Warehouse w WHERE w.warehouseCode = ?1", nativeQuery = true)
     public boolean existsByWarehouseCode(UUID warehouseCode);
     public Warehouse findByWarehouseCode(UUID warehouseCode);
 }

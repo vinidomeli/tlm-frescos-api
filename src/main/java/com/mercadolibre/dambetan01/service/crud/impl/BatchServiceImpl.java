@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.InboundOrder;
 import com.mercadolibre.dambetan01.model.Product;
@@ -66,7 +67,7 @@ public class BatchServiceImpl implements BatchService {
         batchNumbers.forEach(batchNumber -> {
             boolean batchNumberDoesntExists = !batchRepository.existsByBatchNumber(batchNumber);
             if(batchNumberDoesntExists) {
-                throw new RuntimeException("Batch number " + batchNumber + " doesn't exists");
+                throw new ApiException("404", "Batch number " + batchNumber + " doesn't exists", 404);
             }
         });
     }

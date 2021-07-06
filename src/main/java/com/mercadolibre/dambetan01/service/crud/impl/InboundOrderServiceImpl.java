@@ -4,6 +4,7 @@ import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
+import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.InboundOrder;
 import com.mercadolibre.dambetan01.model.Section;
@@ -111,7 +112,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
         boolean orderNumberDoesntExists = !inboundOrderRepository.existsByOrderNumber(orderNumber);
 
         if(orderNumberDoesntExists) {
-            throw new RuntimeException("Order number doesn't exists");
+            throw new ApiException("404", "Order number doesn't exists", 404);
         }
     }
 
@@ -123,7 +124,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                 .equals(sectionCode);
 
         if(inboundOrderDoesntContainsSectionCode) {
-            throw new RuntimeException("Inbound Order doesn't contains Section Code");
+            throw new ApiException("404", "Inbound Order doesn't contains Section Code", 404);
         }
     }
 
@@ -136,7 +137,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                     .equals(orderNumber);
 
             if(inboundOrderDoesntContainsBatchNumber) {
-                throw new RuntimeException("Inbound Order doesn't contains Batch Number " + batchNumber);
+                throw new ApiException("404", "Inbound Order doesn't contains Batch Number " + batchNumber, 404);
             }
         });
     }

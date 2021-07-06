@@ -23,10 +23,12 @@ public class InboundOrderRequestDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "pt-BR", timezone = "UTC")
     private LocalDate orderDate = LocalDate.now();
 
+    @Valid
     @JsonProperty("section")
     @NotNull(message = "Section is required.")
     private SectionRequestDTO section;
 
+    @Valid
     @JsonProperty("batchStock")
     @NotNull(message = "BatchStock is required.")
     @Size(min = 1, message = "BatchStock should contain at least 1 batch.")

@@ -24,7 +24,7 @@ public class SectionServiceImpl implements SectionService {
     public void sectionExists(UUID sectionCode) {
         boolean sectionDoesntExists = !sectionRepository.existsBySectionCode(sectionCode);
         if(sectionDoesntExists) {
-            throw new RuntimeException("Section doesn't exists");
+            throw new ApiException("404", "Section doesn't exists", 404);
         }
     }
 

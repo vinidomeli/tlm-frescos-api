@@ -10,7 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SectionRepository extends JpaRepository<Section, UUID> {
 
-//    @Query(value = "SELECT CASE WHEN COUNT(s.sectionCode) > 0 THEN TRUE ELSE FALSE END FROM Section s WHERE s.sectionCode = ?1", nativeQuery = true)
     public boolean existsBySectionCode(UUID sectionCode);
     public Section findBySectionCode(UUID sectionCode);
 }
