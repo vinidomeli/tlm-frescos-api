@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Long> {
 
-    public List<Batch> findBatchesByInboundOrder_OrderNumber(Long orderNumber);
-    public Batch findBatchByBatchNumber(Long batchNumber);
-    public boolean existsByBatchNumber(Long batchNumber);
+    List<Batch> findBatchesByInboundOrder_OrderNumber(Long orderNumber);
+    Batch findBatchByBatchNumber(Long batchNumber);
+    boolean existsByBatchNumber(Long batchNumber);
 }
