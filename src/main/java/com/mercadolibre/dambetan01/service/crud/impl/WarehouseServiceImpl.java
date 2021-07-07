@@ -39,7 +39,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public BatchStockDueDateDTO getAllBatchesWarehouse(Integer quantityDays) {
         LocalDate todayPlusQuantityDays = LocalDate.now().plusDays(quantityDays);
         List<Batch> batchList = batchRepository.findBatchesByDueDateLessThanEqualOrderByDueDateDesc(todayPlusQuantityDays);
-        
+
         List<BatchDueDateDTO> batchDueDateDTOList = new ArrayList<>();
         batchList.forEach(batch -> {
             BatchDueDateDTO batchDueDateDTO = BatchDueDateDTO.builder()
