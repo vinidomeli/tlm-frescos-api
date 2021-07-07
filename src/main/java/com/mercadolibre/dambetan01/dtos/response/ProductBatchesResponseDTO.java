@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,6 +19,6 @@ public class ProductBatchesResponseDTO {
 
     private SectionDTO sectionDTO;
     private Long productId;
-    private List<BatchStockDTO> batchStock;
+    private List<BatchStockDTO> batchStock = new ArrayList<>();
 
 }

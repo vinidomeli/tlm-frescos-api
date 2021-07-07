@@ -13,7 +13,6 @@ import com.mercadolibre.dambetan01.service.crud.BatchService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,10 +34,37 @@ public class BatchServiceImpl implements BatchService {
         Optional<Product> productOptional = productRepository.findById(productId);
 
         if(!productOptional.isPresent()) {
-            throw new NotFoundException("");
+            throw new NotFoundException("Produto com id" + productId +  "não encontrado!");
         }
 
         return batchRepository.findBatchesByProduct_Id(productId);
+    }
+
+    public List<Batch> findBatchesByProductId(List<String> query) throws NotFoundException {
+        Long productId = Long.parseLong(query.get(0));
+        Optional<Product> productOptional = productRepository.findById(productId);
+        LocalDate validDueDate = LocalDate.now().plusWeeks(3);
+
+
+        if(!productOptional.isPresent()) {
+            throw new NotFoundException("");
+        }
+
+        List<Batch> batches = null;
+
+        if(query.size() == 2) {
+            if(query.get(1).equals("C")) {
+                batches = batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByCurrentQuantity(productId, validDueDate);
+            } else if(query.get(1).equals("F")) {
+                batches = batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
+            }
+        }
+
+        if(batches == null) {
+            batches = batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
+        }
+
+        return batches;
     }
 
     @Override

@@ -1,16 +1,21 @@
 package com.mercadolibre.dambetan01.controller;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.dtos.SectionDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductBatchesResponseDTO;
+import com.mercadolibre.dambetan01.exceptions.NotFoundException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.Product;
 import com.mercadolibre.dambetan01.service.crud.impl.BatchServiceImpl;
 import com.mercadolibre.dambetan01.service.crud.impl.ProductServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,32 +25,38 @@ public class BatchController {
     private final BatchServiceImpl batchService;
     private final ProductServiceImpl productService;
 
+    @Autowired
     public BatchController(BatchServiceImpl batchService, ProductServiceImpl productService) {
         this.batchService = batchService;
         this.productService = productService;
     }
 
 
-    @GetMapping(value = "/{productId}")
-    public ResponseEntity<ProductBatchesResponseDTO> findBatchesByProductId(@PathVariable Long productId) {
+    @GetMapping(value = "/list")
+    public ResponseEntity<ProductBatchesResponseDTO> findBatchesByProductId(@RequestParam List<String> querytype) {
 
-        ProductBatchesResponseDTO productBatchesResponseDTO = new ProductBatchesResponseDTO();
+        HashMap<UUID, ProductBatchesResponseDTO> mapBatches = new HashMap<>();
 
-        List<BatchStockDTO> batches = batchService.findBatchesByProductId(productId).stream().map(batch -> new BatchStockDTO(batch)).collect(Collectors.toList());
+        try {
+            List<Batch> batches = batchService.findBatchesByProductId(querytype);
+            batches.forEach(batch -> {
+                UUID sectionCode = batch.getInboundOrder().getSection().getSectionCode();
+                if(mapBatches.containsKey(sectionCode)) {
+                    mapBatches.get(sectionCode).getBatchStock().add(new BatchStockDTO(batch));
+                } else {
+                    ProductBatchesResponseDTO productBatchesResponseDTO = new ProductBatchesResponseDTO();
+                    productBatchesResponseDTO.setProductId(Long.parseLong(querytype.get(0)));
+                    productBatchesResponseDTO.setSectionDTO(new SectionDTO(sectionCode, batch.getInboundOrder().getSection().getWarehouse().getWarehouseCode()));
+                    productBatchesResponseDTO.getBatchStock().add(new BatchStockDTO(batch));
 
-        productBatchesResponseDTO.setSectionDTO(null);
-        productBatchesResponseDTO.setProductId(productId);
-        productBatchesResponseDTO.setBatchStock(batches);
+                    mapBatches.put(sectionCode, productBatchesResponseDTO);
+                }
+            });
+        } catch (NotFoundException e) {
 
-        return new ResponseEntity<>(productBatchesResponseDTO, HttpStatus.OK);
-    }
+        }
 
-    @PostMapping(value = "/batch/{productId}-{inboundOrder}")
-    public void createBatch(@PathVariable("productId") Long productId, @PathVariable("inboundOrder") Long inboundOrder) {
-
-        Product product = productService.findProductById(productId);
-
-        batchService.createBatch(product, null);
+        return new ResponseEntity(mapBatches.values(), HttpStatus.OK);
     }
 
 }
