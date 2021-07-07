@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.exceptions.ApiException;
+import com.mercadolibre.dambetan01.model.Product;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.service.crud.ProductService;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,10 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+
+    public Product findProductById(Long productId) {
+        return this.productRepository.findById(productId).get();
     }
 
     @Override
