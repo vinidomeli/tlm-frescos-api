@@ -16,4 +16,5 @@ public interface BatchRepository extends JpaRepository<Batch, Long> {
     List<Batch> findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(Long productId, LocalDate localDate);
     Batch findBatchByBatchNumber(Long batchNumber);
     boolean existsByBatchNumber(Long batchNumber);
+    List<Batch> findBatchesByDueDateLessThanEqualOrderByDueDateDesc(LocalDate localDate);
 }
