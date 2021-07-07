@@ -1,9 +1,6 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
-import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
-import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
-import com.mercadolibre.dambetan01.model.Product;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.service.crud.ProductService;
 import org.springframework.stereotype.Service;
@@ -15,13 +12,13 @@ public class ProductServiceImpl implements ProductService {
 
     ProductRepository productRepository;
 
-    public ProductServiceImpl(final ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     @Override
     public boolean productExists(long productId) {
-        return productRepository.findById(productId).isPresent();
+        return this.productRepository.findById(productId).isPresent();
     }
 
     @Override
@@ -29,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
         productIds.stream()
                 .forEach(productId -> {
                     boolean productDoesntExists = !productExists(productId);
-                    if(productDoesntExists) {
+                    if (productDoesntExists) {
                         throw new ApiException("404", "Product Doesn't exists", 404);
                     }
                 });

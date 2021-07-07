@@ -1,6 +1,8 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.dtos.WarehouseProductQuantityDTO;
+import com.mercadolibre.dambetan01.dtos.response.ProductInWarehousesDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.InboundOrder;
@@ -11,7 +13,9 @@ import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.service.crud.BatchService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BatchServiceImpl implements BatchService {
@@ -30,8 +34,8 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch convertBatchStockDTOToBatch(BatchStockDTO batchStockDTO, Long inboundOrderNumber) {
 
-        Product product = productRepository.findById(batchStockDTO.getProductId()).get();
-        InboundOrder inboundOrder = inboundOrderRepository.findByOrderNumber(inboundOrderNumber);
+        Product product = this.productRepository.findById(batchStockDTO.getProductId()).get();
+        InboundOrder inboundOrder = this.inboundOrderRepository.findByOrderNumber(inboundOrderNumber);
 
         return Batch.builder()
                 .productType(product.getType())
@@ -65,10 +69,40 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public void batchNumbersExist(List<Long> batchNumbers) {
         batchNumbers.forEach(batchNumber -> {
-            boolean batchNumberDoesntExists = !batchRepository.existsByBatchNumber(batchNumber);
-            if(batchNumberDoesntExists) {
+            boolean batchNumberDoesntExists = !this.batchRepository.existsByBatchNumber(batchNumber);
+            if (batchNumberDoesntExists) {
                 throw new ApiException("404", "Batch number " + batchNumber + " doesn't exists", 404);
             }
         });
+    }
+
+    @Override
+    public ProductInWarehousesDTO findProductInWarehousesBy(Long productID) {
+
+        List<Batch> productBatches = this.batchRepository.findBatchesByProductId(productID);
+
+        List<WarehouseProductQuantityDTO> productsQuantity = buildProductsQuantityBy(productBatches);
+
+        return ProductInWarehousesDTO.builder()
+                .productId(productID)
+                .warehouses(productsQuantity)
+                .build();
+    }
+
+    protected List<WarehouseProductQuantityDTO> buildProductsQuantityBy(List<Batch> productBatches) {
+        List<WarehouseProductQuantityDTO> productsQuantity = new ArrayList<>();
+
+        productBatches.forEach(batch -> {
+            UUID warehouseCode = batch.getInboundOrder().getSection().getWarehouse().getWarehouseCode();
+            Integer currentQuantity = batch.getCurrentQuantity();
+
+            WarehouseProductQuantityDTO warehouseProductQuantity = WarehouseProductQuantityDTO.builder()
+                    .warehouseCode(warehouseCode)
+                    .totalQuantity(currentQuantity)
+                    .build();
+
+            productsQuantity.add(warehouseProductQuantity);
+        });
+        return productsQuantity;
     }
 }
