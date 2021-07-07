@@ -2,6 +2,7 @@ package com.mercadolibre.dambetan01.service.crud;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductInWarehousesDTO;
+import com.mercadolibre.dambetan01.exceptions.NotFoundException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.InboundOrder;
 import com.mercadolibre.dambetan01.model.Product;
@@ -17,5 +18,9 @@ public interface BatchService {
     public ProductInWarehousesDTO findProductInWarehousesBy(Long productID);
 
     Batch createBatch(Product product, InboundOrder inboundOrder);
+
+    public List<Batch> findBatchesByProductId(List<String> query) throws NotFoundException;
+
+    public List<Batch> findBatchesByProductId(Long productId);
 
 }

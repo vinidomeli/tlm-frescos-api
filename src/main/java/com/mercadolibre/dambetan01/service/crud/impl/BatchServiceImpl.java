@@ -34,6 +34,7 @@ public class BatchServiceImpl implements BatchService {
         this.batchRepository = batchRepository;
     }
 
+    @Override
     public List<Batch> findBatchesByProductId(Long productId) {
         Optional<Product> productOptional = this.productRepository.findById(productId);
 
@@ -44,6 +45,7 @@ public class BatchServiceImpl implements BatchService {
         return this.batchRepository.findBatchesByProduct_Id(productId);
     }
 
+    @Override
     public List<Batch> findBatchesByProductId(List<String> query) throws NotFoundException {
         Long productId = Long.parseLong(query.get(0));
         Optional<Product> productOptional = this.productRepository.findById(productId);
