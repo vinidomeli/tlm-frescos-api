@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface PurchaseService {
     public List<ProductResponseDTO> listAllProducts();
     public List<ProductResponseDTO> listProductsByCategory(String productType);
-    public List<PurchaseOrderDetailDTO> listOrderProducts(Long idOrder);
+    public List<PurchaseOrderDetailDTO> listPurchaseOrderProducts(Long idOrder);
     public Optional<User> validateUser(String role) throws ApiException;
     public boolean productStock(List<Batch> batchList, Integer quantityNeeded);
 }

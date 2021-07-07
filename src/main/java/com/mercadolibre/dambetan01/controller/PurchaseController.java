@@ -42,7 +42,7 @@ public class PurchaseController {
     //@PreAuthorize("hasAnyRole('BUYER')")
     @GetMapping("/orders")
     public ResponseEntity<List<PurchaseOrderDetailDTO>> listOrderProducts(@RequestParam Long orderId) {
-        List<PurchaseOrderDetailDTO> purchaseOrderDetails = purchaseService.listOrderProducts(orderId);
+        List<PurchaseOrderDetailDTO> purchaseOrderDetails = purchaseService.listPurchaseOrderProducts(orderId);
         return new ResponseEntity<>(purchaseOrderDetails, HttpStatus.OK);
     }
 }

@@ -4,7 +4,6 @@ import com.mercadolibre.dambetan01.dtos.response.ProductResponseDTO;
 import com.mercadolibre.dambetan01.dtos.response.PurchaseOrderDetailDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.exceptions.NotFoundException;
-import com.mercadolibre.dambetan01.exceptions.ProductListEmptyException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.PurchaseOrder;
 import com.mercadolibre.dambetan01.model.User;
@@ -67,9 +66,9 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     //[REQ-02] GET: List of purchase order products
     @Override
-    public List<PurchaseOrderDetailDTO> listOrderProducts(Long orderId) {
+    public List<PurchaseOrderDetailDTO> listPurchaseOrderProducts(Long orderId) {
         PurchaseOrder purchaseOrder = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order doesn't exist."));
-        List<PurchaseOrderDetailDTO> purchaseOrderList = orderRepository.findOrdersByProducts(purchaseOrder)
+        List<PurchaseOrderDetailDTO> purchaseOrderList = orderRepository.findPurchaseOrderByProducts(purchaseOrder)
                 .stream()
                 .map(product -> modelMapper.map(product, PurchaseOrderDetailDTO.class))
                 .collect(Collectors.toList());
