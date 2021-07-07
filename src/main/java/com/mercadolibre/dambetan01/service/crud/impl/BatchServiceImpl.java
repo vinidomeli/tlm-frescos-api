@@ -15,10 +15,7 @@ import com.mercadolibre.dambetan01.service.crud.BatchService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BatchServiceImpl implements BatchService {
@@ -132,19 +129,27 @@ public class BatchServiceImpl implements BatchService {
     }
 
     protected List<WarehouseProductQuantityDTO> buildProductsQuantityBy(List<Batch> productBatches) {
+        Map<UUID, Integer> productsMap = new HashMap<>();
         List<WarehouseProductQuantityDTO> productsQuantity = new ArrayList<>();
 
         productBatches.forEach(batch -> {
             UUID warehouseCode = batch.getInboundOrder().getSection().getWarehouse().getWarehouseCode();
             Integer currentQuantity = batch.getCurrentQuantity();
+            boolean warehouseCodeAlreadyExists = productsMap.containsKey(warehouseCode);
 
-            WarehouseProductQuantityDTO warehouseProductQuantity = WarehouseProductQuantityDTO.builder()
-                    .warehouseCode(warehouseCode)
-                    .totalQuantity(currentQuantity)
-                    .build();
-
-            productsQuantity.add(warehouseProductQuantity);
+            if (warehouseCodeAlreadyExists) {
+                Integer actualQuantity = productsMap.get(warehouseCode);
+                productsMap.put(warehouseCode, actualQuantity + currentQuantity);
+            } else {
+                productsMap.put(warehouseCode, currentQuantity);
+            }
         });
+
+        productsMap.forEach((key, value) -> productsQuantity.add(WarehouseProductQuantityDTO.builder()
+                .warehouseCode(key)
+                .totalQuantity(value)
+                .build()));
+
         return productsQuantity;
     }
 
