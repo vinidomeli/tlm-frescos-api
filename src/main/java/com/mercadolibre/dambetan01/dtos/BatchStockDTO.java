@@ -69,4 +69,16 @@ public class BatchStockDTO {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dueDate;
+
+    public BatchStockDTO(Batch batch) {
+        this.productId = batch.getProduct().getId();
+        this.currentTemperature = batch.getCurrentTemperature();
+        this.minimumTemperature = batch.getMinimumTemperature();
+        this.initialQuantity = batch.getInitialQuantity();
+        this.currentQuantity = batch.getCurrentQuantity();
+        this.manufacturingDate = batch.getManufacturingDate();
+        this.manufacturingTime = batch.getManufacturingTime();
+        this.dueDate = batch.getDueDate();
+    }
+
 }
