@@ -13,8 +13,10 @@ import com.mercadolibre.dambetan01.service.crud.impl.WarehouseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/fresh-products")
+@Validated
 public class BatchController {
 
     private final BatchServiceImpl batchService;
@@ -73,10 +76,10 @@ public class BatchController {
     //ml-check-batch-stock-due-date-01
     //Obtenha uma lista de lotes ordenados por data de validade, que pertencem a uma determinada categoria de produto.
     @GetMapping(value = "/due-date/list")
-    public ResponseEntity<BatchStockDueDateDTO> getBatchStockOrderedByDueDate(@RequestParam Integer numberOfDays,
+    public ResponseEntity<BatchStockDueDateDTO> getBatchStockOrderedByDueDate(@RequestParam @Min(value = 0, message = "Number of days must be greater than or equals zero") Integer numberOfDays,
                                                                               @RequestParam String productType,
                                                                               @RequestParam String order) {
-        BatchStockDueDateDTO response = null;
+        BatchStockDueDateDTO response = warehouseService.getAllBatchesWarehouseByCategory(numberOfDays, productType, order);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

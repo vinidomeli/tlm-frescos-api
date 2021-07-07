@@ -8,4 +8,5 @@ public interface WarehouseService {
 
     public void warehouseExists(UUID warehouseCode);
     public BatchStockDueDateDTO getAllBatchesWarehouse(Integer quantityDays);
+    public BatchStockDueDateDTO getAllBatchesWarehouseByCategory(Integer numberOfDays, String productType, String order);
 }

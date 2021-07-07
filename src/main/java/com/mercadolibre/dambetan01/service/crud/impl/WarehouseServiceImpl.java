@@ -54,4 +54,34 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         return new BatchStockDueDateDTO(batchDueDateDTOList);
     }
+
+    @Override
+    public BatchStockDueDateDTO getAllBatchesWarehouseByCategory(Integer numberOfDays, String productType, String order) {
+        LocalDate todayPlusQuantityDays = LocalDate.now().plusDays(numberOfDays);
+
+        List<Batch> batchList;
+        if(order.equals("desc")) {
+            batchList = batchRepository.findBatchesByDueDateLessThanEqualAndProductTypeOrderByDueDateDesc(todayPlusQuantityDays, productType);
+        } else if (order.equals("asc")) {
+            batchList = batchRepository.findBatchesByDueDateLessThanEqualAndProductTypeOrderByDueDateAsc(todayPlusQuantityDays, productType);
+        } else {
+            batchList = null;
+        }
+
+        List<BatchDueDateDTO> batchDueDateDTOList = new ArrayList<>();
+        if (batchList != null) {
+            batchList.forEach(batch -> {
+                BatchDueDateDTO batchDueDateDTO = BatchDueDateDTO.builder()
+                        .batchNumber(batch.getBatchNumber())
+                        .productId(batch.getProduct().getId())
+                        .productTypeId(batch.getProductType())
+                        .dueDate(batch.getDueDate())
+                        .quantity(batch.getCurrentQuantity())
+                        .build();
+                batchDueDateDTOList.add(batchDueDateDTO);
+            });
+        }
+
+        return new BatchStockDueDateDTO(batchDueDateDTOList);
+    }
 }
