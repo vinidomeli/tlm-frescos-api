@@ -19,6 +19,10 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
+    public Product findProductById(Long productId) {
+        return productRepository.findById(productId).get();
+    }
+
     @Override
     public boolean productExists(long productId) {
         return productRepository.findById(productId).isPresent();
