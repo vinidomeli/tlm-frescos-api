@@ -1,14 +1,17 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.github.javafaker.Faker;
+import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.request.SectionRequestDTO;
+import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.model.InboundOrder;
 import com.mercadolibre.dambetan01.model.Section;
 import com.mercadolibre.dambetan01.repository.BatchRepository;
 import com.mercadolibre.dambetan01.repository.InboundOrderRepository;
+import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.repository.SectionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,41 +38,60 @@ class InboundOrderServiceImplTest {
     BatchRepository batchRepository;
     @Mock
     SectionRepository sectionRepository;
-
+    @Mock
+    BatchServiceImpl batchService;
     @InjectMocks
     InboundOrderServiceImpl inboundOrderService;
 
     Faker faker = new Faker();
 
-//    @Test
-//    void saveInboundOrder() {
-//        InboundOrderRequestDTO inboundOrderRequestDTO = mock(InboundOrderRequestDTO.class);
-//        InboundOrder inboundOrder = mock(InboundOrder.class);
-//
-//        SectionRequestDTO sectionRequestDTO = mock(SectionRequestDTO.class);
-//        Section section = mock(Section.class);
-//        UUID sectionCode = UUID.fromString(faker.internet().uuid());
-//        LocalDate orderDate = LocalDate.now();
-//
-//        when(inboundOrderService.inboundOrderRequestDTOToInboundOrder(any())).thenReturn(inboundOrder);
-//        when(inboundOrderRepository.save(inboundOrder)).thenReturn(inboundOrder);
-//        when(inboundOrderRequestDTO.getSection()).thenReturn(sectionRequestDTO);
-//        when(sectionRequestDTO.getSectionCode()).thenReturn(sectionCode);
-//        when(sectionRepository.findBySectionCode(any())).thenReturn(section);
-//        when(inboundOrderRequestDTO.getOrderDate()).thenReturn(orderDate);
-//        assertEquals(inboundOrder, inboundOrderService.saveInboundOrder(inboundOrderRequestDTO));
-//    }
+    @Test
+    void inboundOrderRequestDTOToInboundOrderTest() {
 
-//    @Test
-//    void saveBatchStock() {
-//        Batch batch = mock(Batch.class);
-//        when(batchRepository.save(any())).thenReturn(batch);
-//        assertEquals(batch, batchRepository.save(batch));
-//    }
+        SectionRequestDTO sectionRequestDTO = SectionRequestDTO.builder()
+                .sectionCode(UUID.fromString(faker.internet().uuid()))
+                .build();
 
-//    @Test
-//    void updateInboundOrder() {
-//    }
+        Section section = Section.builder()
+                .sectionCode(sectionRequestDTO.getSectionCode())
+                .build();
+
+        InboundOrderRequestDTO inboundOrderRequestDTO = InboundOrderRequestDTO.builder()
+                .orderDate(LocalDate.now())
+                .section(sectionRequestDTO)
+                .build();
+
+        InboundOrder inboundOrder = InboundOrder.builder()
+                .orderDate(inboundOrderRequestDTO.getOrderDate())
+                .section(section)
+                .build();
+
+        when(sectionRepository.findBySectionCode(any())).thenReturn(section);
+        assertEquals(inboundOrder, inboundOrderService.inboundOrderRequestDTOToInboundOrder(inboundOrderRequestDTO));
+    }
+
+    @Test
+    void inboundOrderToBatchStockResponseDTOTest() {
+
+        InboundOrder inboundOrder = InboundOrder.builder()
+                .orderNumber(faker.number().randomNumber())
+                .orderDate(LocalDate.now())
+                .build();
+
+        Batch batch = Batch.builder().build();
+        List<Batch> batches = Arrays.asList(batch);
+        BatchStockDTO batchStockDTO = BatchStockDTO.builder().build();
+        List<BatchStockDTO> batchStockDTOList = Arrays.asList(batchStockDTO);
+        BatchStockResponseDTO batchStockResponseDTO = BatchStockResponseDTO.builder()
+                .orderNumber(inboundOrder.getOrderNumber())
+                .orderDate(inboundOrder.getOrderDate())
+                .batchStock(batchStockDTOList)
+                .build();
+
+        when(batchRepository.findBatchesByInboundOrder_OrderNumber(any())).thenReturn(batches);
+        when(batchService.convertBatchToBatchStockDTO(any())).thenReturn(batchStockDTO);
+        assertEquals(batchStockResponseDTO, inboundOrderService.inboundOrderToBatchStockResponseDTO(inboundOrder));
+    }
 
     @Test
     void orderNumberExists() {
