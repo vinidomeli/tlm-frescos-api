@@ -1,7 +1,9 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.dtos.SectionDTO;
 import com.mercadolibre.dambetan01.dtos.WarehouseProductQuantityDTO;
+import com.mercadolibre.dambetan01.dtos.response.ProductBatchesResponseDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductInWarehousesDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.exceptions.NotFoundException;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BatchServiceImpl implements BatchService {
@@ -43,31 +46,38 @@ public class BatchServiceImpl implements BatchService {
     }
 
     @Override
-    public List<Batch> findBatchesByProductId(List<String> query) throws NotFoundException {
-        Long productId = Long.parseLong(query.get(0));
+    public List<ProductBatchesResponseDTO> findBatchesByProductId(Long productId, String order) throws NotFoundException {
         Optional<Product> productOptional = this.productRepository.findById(productId);
         LocalDate validDueDate = LocalDate.now().plusWeeks(3);
-
+        HashMap<UUID, ProductBatchesResponseDTO> mapBatches = new HashMap<>();
 
         if (!productOptional.isPresent()) {
-            throw new NotFoundException("Product not found");
+            throw new ApiException("404", "Product number " + productId + " doesn't exists", 404);
         }
 
         List<Batch> batches = null;
 
-        if (query.size() == 2) {
-            if (query.get(1).equals("C")) {
-                batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByCurrentQuantity(productId, validDueDate);
-            } else if (query.get(1).equals("F")) {
-                batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
-            }
-        }
-
-        if (batches == null) {
+        if (order != null && order.equals("C")) {
+            batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByCurrentQuantity(productId, validDueDate);
+        } else {
             batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
         }
 
-        return batches;
+        batches.forEach(batch -> {
+            UUID sectionCode = batch.getInboundOrder().getSection().getSectionCode();
+            if (mapBatches.containsKey(sectionCode)) {
+                mapBatches.get(sectionCode).getBatchStock().add(new BatchStockDTO(batch));
+            } else {
+                ProductBatchesResponseDTO productBatchesResponseDTO = new ProductBatchesResponseDTO();
+                productBatchesResponseDTO.setProductId(productId);
+                productBatchesResponseDTO.setSectionDTO(new SectionDTO(sectionCode, batch.getInboundOrder().getSection().getWarehouse().getWarehouseCode()));
+                productBatchesResponseDTO.getBatchStock().add(new BatchStockDTO(batch));
+
+                mapBatches.put(sectionCode, productBatchesResponseDTO);
+            }
+        });
+
+        return mapBatches.values().stream().collect(Collectors.toList());
     }
 
     @Override
