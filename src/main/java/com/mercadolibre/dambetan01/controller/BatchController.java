@@ -39,30 +39,11 @@ public class BatchController {
     }
 
     @GetMapping(value = "/list")
-    public ResponseEntity<ProductBatchesResponseDTO> findBatchesByProductId(@RequestParam List<String> querytype) {
+    public ResponseEntity<ProductBatchesResponseDTO> findBatchesByProductId(@RequestParam Long productId, @RequestParam(required = false) String order) {
 
-        HashMap<UUID, ProductBatchesResponseDTO> mapBatches = new HashMap<>();
+        List<ProductBatchesResponseDTO> productBatchesResponseDTOS = batchService.findBatchesByProductId(productId, order);
 
-        try {
-            List<Batch> batches = this.batchService.findBatchesByProductId(querytype);
-            batches.forEach(batch -> {
-                UUID sectionCode = batch.getInboundOrder().getSection().getSectionCode();
-                if (mapBatches.containsKey(sectionCode)) {
-                    mapBatches.get(sectionCode).getBatchStock().add(new BatchStockDTO(batch));
-                } else {
-                    ProductBatchesResponseDTO productBatchesResponseDTO = new ProductBatchesResponseDTO();
-                    productBatchesResponseDTO.setProductId(Long.parseLong(querytype.get(0)));
-                    productBatchesResponseDTO.setSectionDTO(new SectionDTO(sectionCode, batch.getInboundOrder().getSection().getWarehouse().getWarehouseCode()));
-                    productBatchesResponseDTO.getBatchStock().add(new BatchStockDTO(batch));
-
-                    mapBatches.put(sectionCode, productBatchesResponseDTO);
-                }
-            });
-        } catch (NotFoundException e) {
-
-        }
-
-        return new ResponseEntity(mapBatches.values(), HttpStatus.OK);
+        return new ResponseEntity(productBatchesResponseDTOS, HttpStatus.OK);
     }
 
     //ml-check-batch-stock-due-date-01
