@@ -1,6 +1,8 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.dtos.WarehouseProductQuantityDTO;
+import com.mercadolibre.dambetan01.dtos.response.ProductInWarehousesDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.exceptions.NotFoundException;
 import com.mercadolibre.dambetan01.model.Batch;
@@ -13,8 +15,7 @@ import com.mercadolibre.dambetan01.service.crud.BatchService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BatchServiceImpl implements BatchService {
@@ -30,38 +31,40 @@ public class BatchServiceImpl implements BatchService {
         this.batchRepository = batchRepository;
     }
 
+    @Override
     public List<Batch> findBatchesByProductId(Long productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
+        Optional<Product> productOptional = this.productRepository.findById(productId);
 
-        if(!productOptional.isPresent()) {
-            throw new NotFoundException("Produto com id" + productId +  "não encontrado!");
+        if (!productOptional.isPresent()) {
+            throw new NotFoundException("Product " + productId + "not found!");
         }
 
-        return batchRepository.findBatchesByProduct_Id(productId);
+        return this.batchRepository.findBatchesByProduct_Id(productId);
     }
 
+    @Override
     public List<Batch> findBatchesByProductId(List<String> query) throws NotFoundException {
         Long productId = Long.parseLong(query.get(0));
-        Optional<Product> productOptional = productRepository.findById(productId);
+        Optional<Product> productOptional = this.productRepository.findById(productId);
         LocalDate validDueDate = LocalDate.now().plusWeeks(3);
 
 
-        if(!productOptional.isPresent()) {
+        if (!productOptional.isPresent()) {
             throw new NotFoundException("Product not found");
         }
 
         List<Batch> batches = null;
 
-        if(query.size() == 2) {
-            if(query.get(1).equals("C")) {
-                batches = batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByCurrentQuantity(productId, validDueDate);
-            } else if(query.get(1).equals("F")) {
-                batches = batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
+        if (query.size() == 2) {
+            if (query.get(1).equals("C")) {
+                batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByCurrentQuantity(productId, validDueDate);
+            } else if (query.get(1).equals("F")) {
+                batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
             }
         }
 
-        if(batches == null) {
-            batches = batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
+        if (batches == null) {
+            batches = this.batchRepository.findBatchesByProduct_IdAndDueDateGreaterThanOrderByDueDateAsc(productId, validDueDate);
         }
 
         return batches;
@@ -70,8 +73,8 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch convertBatchStockDTOToBatch(BatchStockDTO batchStockDTO, Long inboundOrderNumber) {
 
-        Product product = productRepository.findById(batchStockDTO.getProductId()).get();
-        InboundOrder inboundOrder = inboundOrderRepository.findByOrderNumber(inboundOrderNumber);
+        Product product = this.productRepository.findById(batchStockDTO.getProductId()).get();
+        InboundOrder inboundOrder = this.inboundOrderRepository.findByOrderNumber(inboundOrderNumber);
 
         return Batch.builder()
                 .productType(product.getType())
@@ -105,11 +108,49 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public void batchNumbersExist(List<Long> batchNumbers) {
         batchNumbers.forEach(batchNumber -> {
-            boolean batchNumberDoesntExists = !batchRepository.existsByBatchNumber(batchNumber);
-            if(batchNumberDoesntExists) {
+            boolean batchNumberDoesntExists = !this.batchRepository.existsByBatchNumber(batchNumber);
+            if (batchNumberDoesntExists) {
                 throw new ApiException("404", "Batch number " + batchNumber + " doesn't exists", 404);
             }
         });
+    }
+
+    @Override
+    public ProductInWarehousesDTO findProductInWarehousesBy(Long productID) {
+
+        List<Batch> productBatches = this.batchRepository.findBatchesByProduct_Id(productID);
+
+        List<WarehouseProductQuantityDTO> productsQuantity = buildProductsQuantityBy(productBatches);
+
+        return ProductInWarehousesDTO.builder()
+                .productId(productID)
+                .warehouses(productsQuantity)
+                .build();
+    }
+
+    protected List<WarehouseProductQuantityDTO> buildProductsQuantityBy(List<Batch> productBatches) {
+        Map<UUID, Integer> productsMap = new HashMap<>();
+        List<WarehouseProductQuantityDTO> productsQuantity = new ArrayList<>();
+
+        productBatches.forEach(batch -> {
+            UUID warehouseCode = batch.getInboundOrder().getSection().getWarehouse().getWarehouseCode();
+            Integer currentQuantity = batch.getCurrentQuantity();
+            boolean warehouseCodeAlreadyExists = productsMap.containsKey(warehouseCode);
+
+            if (warehouseCodeAlreadyExists) {
+                Integer actualQuantity = productsMap.get(warehouseCode);
+                productsMap.put(warehouseCode, actualQuantity + currentQuantity);
+            } else {
+                productsMap.put(warehouseCode, currentQuantity);
+            }
+        });
+
+        productsMap.forEach((key, value) -> productsQuantity.add(WarehouseProductQuantityDTO.builder()
+                .warehouseCode(key)
+                .totalQuantity(value)
+                .build()));
+
+        return productsQuantity;
     }
 
     @Override
@@ -124,7 +165,7 @@ public class BatchServiceImpl implements BatchService {
         batch.setInitialQuantity(1);
         batch.setCurrentQuantity(1);
 
-        return batchRepository.save(batch);
+        return this.batchRepository.save(batch);
     }
 
 }
