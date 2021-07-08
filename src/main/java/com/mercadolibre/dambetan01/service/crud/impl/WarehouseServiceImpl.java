@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchDueDateDTO;
+import com.mercadolibre.dambetan01.dtos.WarehouseDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockDueDateDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.Batch;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class WarehouseServiceImpl implements WarehouseService {
@@ -28,9 +30,9 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void warehouseExists(UUID warehouseCode) {
-        boolean warehouseCodeDoesntExists = !warehouseRepository.existsByWarehouseCode(warehouseCode);
+        boolean warehouseCodeDoesntExists = !this.warehouseRepository.existsByWarehouseCode(warehouseCode);
 
-        if(warehouseCodeDoesntExists) {
+        if (warehouseCodeDoesntExists) {
             throw new ApiException("404", "Warehouse Code doesn't exists", 404);
         }
     }
@@ -58,7 +60,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public BatchStockDueDateDTO getAllBatchesWarehouseByCategory(Integer numberOfDays, String productType, String order) {
         LocalDate todayPlusQuantityDays = LocalDate.now().plusDays(numberOfDays);
-
+    
         List<Batch> batchList;
         if(order.equals("desc")) {
             batchList = batchRepository.findBatchesByDueDateLessThanEqualAndProductTypeOrderByDueDateDesc(todayPlusQuantityDays, productType);
@@ -83,5 +85,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         }
 
         return new BatchStockDueDateDTO(batchDueDateDTOList);
+    }
+
+    public List<WarehouseDTO> findAll() {
+        return this.warehouseRepository.findAll().stream().map(WarehouseDTO::toDTO).collect(Collectors.toList());
     }
 }
