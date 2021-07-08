@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@NoArgsConstructor
 public class UserDB {
 
     private Faker faker = new Faker();

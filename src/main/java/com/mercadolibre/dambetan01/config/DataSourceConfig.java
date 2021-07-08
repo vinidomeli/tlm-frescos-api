@@ -20,6 +20,16 @@ public class DataSourceConfig {
 
     @Bean
     @Qualifier("datasource")
+    @Profile("test")
+    public DataSource getDataSourceForTests() {
+        return DataSourceBuilder.create()
+                .url("jdbc:h2:mem:testdb")
+                .username("sa")
+                .build();
+    }
+/*
+    @Bean
+    @Qualifier("datasource")
     @Profile({"!local & !integration_test"})
     public DataSource getDataSource(
             final @Value("${spring.datasource.host}") String host,
@@ -34,6 +44,8 @@ public class DataSourceConfig {
                 .password(FuryUtils.getEnv(password))
                 .build();
     }
+
+ */
 
     @Bean
     @Qualifier("datasource")

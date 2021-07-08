@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,4 +19,17 @@ public class BatchStockResponseDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
     private List<BatchStockDTO> batchStock;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BatchStockResponseDTO that = (BatchStockResponseDTO) o;
+        return Objects.equals(orderNumber, that.orderNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderNumber);
+    }
 }

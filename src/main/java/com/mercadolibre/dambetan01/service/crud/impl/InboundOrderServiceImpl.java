@@ -39,15 +39,8 @@ public class InboundOrderServiceImpl implements InboundOrderService {
 
     @Override
     public BatchStockResponseDTO registerNewInboundOrder(InboundOrderRequestDTO inboundOrderRequestDTO) {
-
-        InboundOrder inboundOrder = inboundOrderRequestDTOToInboundOrder(inboundOrderRequestDTO);
-        InboundOrder registeredInboundOrder = inboundOrderRepository.save(inboundOrder);
-
-        inboundOrderRequestDTO.getBatchStock()
-                .forEach(batchStockDTO -> {
-                    Batch batch = batchServiceImpl.convertBatchStockDTOToBatch(batchStockDTO, registeredInboundOrder.getOrderNumber());
-                    batchRepository.save(batch);
-                });
+        InboundOrder registeredInboundOrder = saveInboundOrder(inboundOrderRequestDTO);
+        saveBatchStock(inboundOrderRequestDTO, registeredInboundOrder);
 
         return inboundOrderToBatchStockResponseDTO(registeredInboundOrder);
     }
@@ -140,6 +133,19 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                 throw new ApiException("404", "Inbound Order doesn't contains Batch Number " + batchNumber, 404);
             }
         });
+    }
+
+    public InboundOrder saveInboundOrder(InboundOrderRequestDTO inboundOrderRequestDTO) {
+        InboundOrder inboundOrder = inboundOrderRequestDTOToInboundOrder(inboundOrderRequestDTO);
+        return inboundOrderRepository.save(inboundOrder);
+    }
+
+    public void saveBatchStock(InboundOrderRequestDTO inboundOrderRequestDTO, InboundOrder registeredInboundOrder) {
+        inboundOrderRequestDTO.getBatchStock()
+                .forEach(batchStockDTO -> {
+                    Batch batch = batchServiceImpl.convertBatchStockDTOToBatch(batchStockDTO, registeredInboundOrder.getOrderNumber());
+                    batchRepository.save(batch);
+                });
     }
 
 }
