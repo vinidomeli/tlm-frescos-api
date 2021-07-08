@@ -83,4 +83,15 @@ public class BatchStockDTO {
     public int hashCode() {
         return Objects.hash(productId);
     }
+    public BatchStockDTO(Batch batch) {
+        this.productId = batch.getProduct().getId();
+        this.currentTemperature = batch.getCurrentTemperature();
+        this.minimumTemperature = batch.getMinimumTemperature();
+        this.initialQuantity = batch.getInitialQuantity();
+        this.currentQuantity = batch.getCurrentQuantity();
+        this.manufacturingDate = batch.getManufacturingDate();
+        this.manufacturingTime = batch.getManufacturingTime();
+        this.dueDate = batch.getDueDate();
+    }
+
 }
