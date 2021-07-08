@@ -23,48 +23,54 @@ import java.time.LocalDateTime;
 @Builder
 public class UpdateBatchStockDTO {
 
+    @JsonProperty("batchNumber")
     @NotNull(message = "Batch number is required.")
     @JsonProperty("batchNumber")
     private Long batchNumber;
 
+    @JsonProperty("productId")
     @NotNull(message = "Product ID is required.")
     @JsonProperty("productId")
     private Long productId;
 
+    @JsonProperty("currentTemperature")
     @NotNull(message = "Current temperature is required.")
     @JsonProperty("currentTemperature")
     private Double currentTemperature;
 
+    @JsonProperty("minimumTemperature")
     @NotNull(message = "Minimum temperature is required.")
     @JsonProperty("minimumTemperature")
     private Double minimumTemperature;
 
+    @JsonProperty("initialQuantity")
     @NotNull(message = "Initial quantity is required.")
     @Positive(message = "Initial quantity should be positive.")
     @JsonProperty("initialQuantity")
     private Integer initialQuantity;
 
+    @JsonProperty("currentQuantity")
     @NotNull(message = "Current quantity is required.")
     @PositiveOrZero(message = "Current quantity should be positive.")
     @JsonProperty("currentQuantity")
     private Integer currentQuantity;
 
-    @NotNull(message = "Manufacturing date is required.")
     @JsonProperty("manufacturingDate")
+    @NotNull(message = "Manufacturing date is required.")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate manufacturingDate;
 
-    @NotNull(message = "Manufacturing time is required.")
     @JsonProperty("manufacturingTime")
+    @NotNull(message = "Manufacturing time is required.")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime manufacturingTime;
 
-    @NotNull(message = "Due date is required.")
     @JsonProperty("dueDate")
+    @NotNull(message = "Due date is required.")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
