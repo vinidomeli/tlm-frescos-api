@@ -31,7 +31,7 @@ public class BatchController {
         this.productService = productService;
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/batch/list")
     public ResponseEntity<ProductBatchesResponseDTO> findBatchesByProductId(@RequestParam Long productId, @RequestParam(required = false) String order) {
 
         List<ProductBatchesResponseDTO> productBatchesResponseDTOS = batchService.findBatchesByProductId(productId, order);
