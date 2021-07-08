@@ -25,34 +25,28 @@ public class UpdateBatchStockDTO {
 
     @JsonProperty("batchNumber")
     @NotNull(message = "Batch number is required.")
-    @JsonProperty("batchNumber")
     private Long batchNumber;
 
     @JsonProperty("productId")
     @NotNull(message = "Product ID is required.")
-    @JsonProperty("productId")
     private Long productId;
 
     @JsonProperty("currentTemperature")
     @NotNull(message = "Current temperature is required.")
-    @JsonProperty("currentTemperature")
     private Double currentTemperature;
 
     @JsonProperty("minimumTemperature")
     @NotNull(message = "Minimum temperature is required.")
-    @JsonProperty("minimumTemperature")
     private Double minimumTemperature;
 
     @JsonProperty("initialQuantity")
     @NotNull(message = "Initial quantity is required.")
     @Positive(message = "Initial quantity should be positive.")
-    @JsonProperty("initialQuantity")
     private Integer initialQuantity;
 
     @JsonProperty("currentQuantity")
     @NotNull(message = "Current quantity is required.")
     @PositiveOrZero(message = "Current quantity should be positive.")
-    @JsonProperty("currentQuantity")
     private Integer currentQuantity;
 
     @JsonProperty("manufacturingDate")
