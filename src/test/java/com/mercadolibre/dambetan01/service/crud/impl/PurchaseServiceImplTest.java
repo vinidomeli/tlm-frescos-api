@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.exceptions.ApiException;
+import com.mercadolibre.dambetan01.exceptions.NotFoundException;
 import com.mercadolibre.dambetan01.model.Product;
 import com.mercadolibre.dambetan01.model.PurchaseOrder;
 import com.mercadolibre.dambetan01.model.enums.ProductType;
@@ -13,13 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -32,15 +29,12 @@ class PurchaseServiceImplTest {
     @Mock
     OrderRepository orderRepository;
 
-    @Mock
-    UserRepository userRepository;
-
     @InjectMocks
     PurchaseServiceImpl purchaseService;
 
     @Test
     void listAllProducts() {
-        Product product = mock(Product.class);
+        Product product = new Product();
         List<Product> productList = Arrays.asList(product);
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -61,7 +55,7 @@ class PurchaseServiceImplTest {
 
     @Test
     void listProductsByCategory() {
-        Product product = mock(Product.class);
+        Product product = new Product();
         List<Product> productList = Arrays.asList(product);
         when(productRepository.findProductByType(any())).thenReturn(productList);
         assertDoesNotThrow(() -> {
@@ -69,23 +63,29 @@ class PurchaseServiceImplTest {
         });
     }
 
-//    @Test
-//    void listProductsCategoryDoesntExist() {
-//        String productType = ProductType.DRINKS.getDescription();
-//        when(productRepository.findProductByType(any())).thenReturn(null);
-//        assertThrows(ApiException.class, () -> {
-//            purchaseService.listProductsByCategory(productType);
-//        });
-//    }
+    @Test
+    void listProductsCategoryDoesntExist() {
+        List<Product> productList = new ArrayList<>();
+        when(productRepository.findProductByType(any())).thenReturn(productList);
+        assertThrows(ApiException.class, () -> {
+            purchaseService.listProductsByCategory(ProductType.DRINKS.getDescription());
+        });
+    }
 
     @Test
-    void listPurchaseOrderProducts() {
-        PurchaseOrder purchaseOrder = mock(PurchaseOrder.class);
-        Long purchaseorderId = 2l;
-        List<PurchaseOrder> purchaseOrderList = Arrays.asList(purchaseOrder);
-        when(orderRepository.findPurchaseOrderByProducts(any())).thenReturn(purchaseOrderList);
+    void listPurchaseOrderProductsWithAnInvalidOrderId() {
+        when(orderRepository.findById(any())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> {
+            purchaseService.listPurchaseOrderProducts(123L);
+        });
+    }
+
+    @Test
+    void listPurchaseOrderProductsWithAValidOrderId() {
+        when(orderRepository.findById(any())).thenReturn(Optional.of(new PurchaseOrder()));
+        when(orderRepository.findPurchaseOrderByProducts(any())).thenReturn(Collections.singletonList(new PurchaseOrder()));
         assertDoesNotThrow(() -> {
-            purchaseService.listPurchaseOrderProducts(purchaseorderId);
+            purchaseService.listPurchaseOrderProducts(222L);
         });
     }
 }

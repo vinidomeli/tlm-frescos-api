@@ -75,36 +75,4 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         return purchaseOrderList;
     }
-
-    private boolean orderExist(Long idOrder) {
-        Optional<PurchaseOrder> orderId = orderRepository.findById(idOrder);
-        return orderId.isPresent();
-    }
-
-    //o produto tem estoque
-    @Override
-    public boolean productStock(List<Batch> batchList, Integer quantityNeeded) {
-        Integer quantity = 0;
-        for (Batch batch : batchList) {
-            quantity += batch.getCurrentQuantity();
-            if (quantity >= quantityNeeded) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // o comprador está registrado
-    @Override
-    public Optional<User> validateUser(String role) throws ApiException {
-        Optional<User> user = userRepository.findByRole(role);
-        if (!user.isPresent()) {
-            throw new ApiException("404", "User doesn't exists", 404);
-        }
-         if (!user.get().getRole().contains("Buyer")) {
-             throw new ApiException("401", "User Doesn't have access", 401);
-         }
-        return user;
-    }
-
 }
