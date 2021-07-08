@@ -1,5 +1,6 @@
 package com.mercadolibre.dambetan01.config;
 
+import com.mercadolibre.dambetan01.model.enums.Roles;
 import com.mercadolibre.dambetan01.security.JWTAuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,31 +12,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/v1/sign-in").permitAll()
-//                .antMatchers(HttpMethod.GET, "/ping").permitAll()
-//                .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
-//                .antMatchers(HttpMethod.GET, "/fake").permitAll()
-//                .anyRequest().authenticated();
-//    }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/sign-in").permitAll()
+                .antMatchers(HttpMethod.GET, "/ping").permitAll()
+                .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
+                .antMatchers(HttpMethod.GET, "/fake").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/warehouse**").hasAuthority(Roles.SUPERVISOR.name())
+                .anyRequest().authenticated();
+    }
 
     /*
      * remove the comment of the method bellow to view the database structure created in the h2 database
      */
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/fresh-products/inboundorder").permitAll();
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .antMatchers("/").permitAll()
+//               .antMatchers("/h2-console/**").permitAll()
+//                .antMatchers(HttpMethod.POST,"/api/v1/fresh-products/inboundorder").permitAll();
+//        http.csrf().disable();
+//        http.headers().frameOptions().disable();
+//    }
 
 }

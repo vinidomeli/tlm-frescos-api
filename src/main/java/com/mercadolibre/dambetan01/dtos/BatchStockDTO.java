@@ -17,6 +17,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -69,4 +70,28 @@ public class BatchStockDTO {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dueDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BatchStockDTO that = (BatchStockDTO) o;
+        return Objects.equals(productId, that.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId);
+    }
+    public BatchStockDTO(Batch batch) {
+        this.productId = batch.getProduct().getId();
+        this.currentTemperature = batch.getCurrentTemperature();
+        this.minimumTemperature = batch.getMinimumTemperature();
+        this.initialQuantity = batch.getInitialQuantity();
+        this.currentQuantity = batch.getCurrentQuantity();
+        this.manufacturingDate = batch.getManufacturingDate();
+        this.manufacturingTime = batch.getManufacturingTime();
+        this.dueDate = batch.getDueDate();
+    }
+
 }
