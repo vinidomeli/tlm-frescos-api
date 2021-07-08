@@ -1,6 +1,5 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
-import com.mercadolibre.dambetan01.dtos.AuthDTO;
 import com.mercadolibre.dambetan01.dtos.UserDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.User;
@@ -25,8 +24,8 @@ public class UserServiceImpl implements UserService {
     public UserDTO create(UserDTO userCredentials) {
         Roles role = Roles.toEnum(userCredentials.getRole());
 
-        if (existsBy(userCredentials.getLogin())){
-            throw new ApiException("400","User already exists!", 400);
+        if (existsBy(userCredentials.getLogin())) {
+            throw new ApiException("400", "User already exists!", 400);
         }
 
         User user = User.builder()
@@ -39,7 +38,13 @@ public class UserServiceImpl implements UserService {
         return UserDTO.fromEntity(userRepository.save(user));
     }
 
-    protected boolean existsBy(String login){
+    @Override
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new ApiException("404", "User not found", 404));
+    }
+
+    protected boolean existsBy(String login) {
         return userRepository.findByLogin(login).isPresent();
     }
 }
