@@ -36,7 +36,7 @@ public class BatchServiceImpl implements BatchService {
         Optional<Product> productOptional = this.productRepository.findById(productId);
 
         if (!productOptional.isPresent()) {
-            throw new NotFoundException("Produto com id" + productId + "não encontrado!");
+            throw new NotFoundException("Product " + productId + "not found!");
         }
 
         return this.batchRepository.findBatchesByProduct_Id(productId);
