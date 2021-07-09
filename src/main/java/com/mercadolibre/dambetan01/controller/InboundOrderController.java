@@ -7,6 +7,7 @@ import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
 import com.mercadolibre.dambetan01.model.User;
 import com.mercadolibre.dambetan01.service.crud.*;
+import com.mercadolibre.dambetan01.service.impl.SessionServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,10 @@ public class InboundOrderController {
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PostMapping(value = "/inboundorder")
-    public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestBody @Valid InboundOrderRequestDTO inboundOrderRequestDTO) {
+    public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestHeader String token,
+                                                                         @RequestBody @Valid InboundOrderRequestDTO inboundOrderRequestDTO) {
 
+        String username = SessionServiceImpl.getUsername(token);
         List<Long> productIds = inboundOrderRequestDTO.getBatchStock().stream()
                 .map(BatchStockDTO::getProductId)
                 .collect(Collectors.toList());
