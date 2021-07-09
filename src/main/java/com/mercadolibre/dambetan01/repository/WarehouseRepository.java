@@ -11,4 +11,5 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, UUID> {
 
     public boolean existsByWarehouseCode(UUID warehouseCode);
     public Warehouse findByWarehouseCode(UUID warehouseCode);
+
 }
