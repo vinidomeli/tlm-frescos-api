@@ -6,11 +6,9 @@ import com.mercadolibre.dambetan01.service.crud.UserService;
 import com.mercadolibre.dambetan01.service.impl.SessionServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,12 +23,20 @@ public class PurchaseOrderController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<PurchaseOrderResponseDTO> registerOrder(@RequestHeader String token) {
         String username = SessionServiceImpl.getUsername(token);
         UUID userId = userService.findByLogin(username).getId();
         PurchaseOrderResponseDTO response = purchaseOrderContentService.createOrder(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<PurchaseOrderResponseDTO>> listOrders(@RequestHeader String token) {
+        String username = SessionServiceImpl.getUsername(token);
+        UUID userId = userService.findByLogin(username).getId();
+        List<PurchaseOrderResponseDTO> response = purchaseOrderContentService.listOrders(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

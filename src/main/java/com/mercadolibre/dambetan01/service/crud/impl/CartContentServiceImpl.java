@@ -4,10 +4,7 @@ import com.mercadolibre.dambetan01.dtos.request.CartContentRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.CartContentResponseDTO;
 import com.mercadolibre.dambetan01.dtos.response.CartResponseDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
-import com.mercadolibre.dambetan01.model.Cart;
-import com.mercadolibre.dambetan01.model.CartContent;
-import com.mercadolibre.dambetan01.model.Product;
-import com.mercadolibre.dambetan01.model.User;
+import com.mercadolibre.dambetan01.model.*;
 import com.mercadolibre.dambetan01.repository.CartContentRepository;
 import com.mercadolibre.dambetan01.repository.CartRepository;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
@@ -42,17 +39,65 @@ public class CartContentServiceImpl implements CartContentService {
 
         CartContent cartContent = getCartContent(quantity, cart, product);
         cartContentRepository.save(cartContent);
-        if (cart.getPrice() == null) {
-            cart.setPrice(0.0);
-        }
-        Double updatedPrice = cart.getPrice() +
-                (cartContentRequestDTO.getQuantity() * cartContent.getProduct().getPrice());
+//        if (cart.getPrice() == null) {
+//            cart.setPrice(0.0);
+//        }
+////        Double updatedPrice = //cart.getPrice() +
+////                (cartContent.getQuantity() * cartContent.getProduct().getPrice());
+        Double updatedPrice = getTotalPrice(cart);
         cart.setPrice(updatedPrice);
         cartRepository.save(cart);
 
         CartResponseDTO cartResponseDTO = toDto(cart);
 
         return cartResponseDTO;
+    }
+
+    @Override
+    public CartResponseDTO removeToCart(UUID userId, Long cartContentId) {
+        Cart cart = getCartIfExists(userId);
+
+        Optional<CartContent> cartContent = cartContentRepository.findById(cartContentId);
+        boolean cartContentExists = cartContent.isPresent();
+        if (!cartContentExists) {
+            throw new ApiException("404", "cart content not found", 404);
+        }
+        boolean cartContentBelongCart = cartContent.get().getCart().equals(cart);
+        if (!cartContentBelongCart) {
+            throw new ApiException("403", "this cart doesn't contains this product", 403);
+        }
+        cartContentRepository.delete(cartContent.get());
+        Double updatedPrice = getTotalPrice(cart);
+        cart.setPrice(updatedPrice);
+        cartRepository.save(cart);
+
+        CartResponseDTO cartResponseDTO = toDto(cart);
+
+        return cartResponseDTO;
+    }
+
+    @Override
+    public CartResponseDTO listAllCarts(UUID userId) {
+        Cart cart = getCartIfExists(userId);
+        List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
+        List<CartContentResponseDTO> cartContentResponseDTOList = cartContentList.stream()
+                .map(CartContentResponseDTO::toDto).collect(Collectors.toList());
+
+        return CartResponseDTO.builder()
+                .id(cart.getId())
+                .price(cart.getPrice())
+                .content(cartContentResponseDTOList)
+                .build();
+    }
+
+    public Double getTotalPrice(Cart cart){
+        Double totalPrice = 0.0;
+
+        List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
+        for (CartContent cartContent : cartContentList){
+            totalPrice += cartContent.getQuantity() * cartContent.getProduct().getPrice();
+        }
+        return totalPrice;
     }
 
     public CartContent getCartContent(Integer quantity, Cart cart, Product product) {
@@ -91,6 +136,7 @@ public class CartContentServiceImpl implements CartContentService {
 
         Cart cart = Cart.builder()
                 .user(user)
+                .price(0.0)
                 .build();
 
         return cartRepository.findByUserId(userId)
@@ -141,41 +187,6 @@ public class CartContentServiceImpl implements CartContentService {
         });
 
         return cartContentResponseDTOList;
-    }
-
-
-    @Override
-    public CartResponseDTO removeToCart(UUID userId, Long cartContentId) {
-        Cart cart = getCartIfExists(userId);
-
-        Optional<CartContent> cartContent = cartContentRepository.findById(cartContentId);
-        boolean cartContentExists = cartContent.isPresent();
-        if (!cartContentExists) {
-            throw new ApiException("404", "cart content not found", 404);
-        }
-        boolean cartContentBelongCart = cartContent.get().getCart().equals(cart);
-        if (!cartContentBelongCart) {
-            throw new ApiException("403", "this cart doesn't contains this product", 403);
-        }
-        cartContentRepository.delete(cartContent.get());
-
-        CartResponseDTO cartResponseDTO = toDto(cart);
-
-        return cartResponseDTO;
-    }
-
-    @Override
-    public CartResponseDTO listAllCarts(UUID userId) {
-        Cart cart = getCartIfExists(userId);
-        List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
-        List<CartContentResponseDTO> cartContentResponseDTOList = cartContentList.stream()
-                .map(CartContentResponseDTO::toDto).collect(Collectors.toList());
-
-        return CartResponseDTO.builder()
-                .id(cart.getId())
-                .price(cart.getPrice())
-                .content(cartContentResponseDTOList)
-                .build();
     }
 
 }
