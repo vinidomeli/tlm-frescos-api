@@ -53,6 +53,8 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         purchaseOrder.setDate(LocalDate.now());
         purchaseOrder.setPrice(totalPrice);
         // TODO : settar o user
+        Optional<User> user = userRepository.findById(userId);
+        purchaseOrder.setUser(user.get());
         purchaseOrderRepository.save(purchaseOrder);
         purchaseOrderContentRepository.saveAll(purchaseOrderContentList);
 
@@ -60,6 +62,19 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         clearCart(cartContentList);
 
         return makeResponseDto(purchaseOrder);
+    }
+
+    @Override
+    public List<PurchaseOrderResponseDTO> listOrders(UUID userId) {
+        List<PurchaseOrder> orderList = purchaseOrderRepository.findAllByUserId(userId);
+
+        boolean orderIsNullOrEmpty = orderList == null || orderList.isEmpty();
+        if (orderIsNullOrEmpty) {
+            throw new ApiException("404", "none order found", 404);
+        }
+
+        return orderList.stream()
+                .map(PurchaseOrderResponseDTO::toDto).collect(Collectors.toList());
     }
 
     public List<CartContent> getCartContentList(UUID userId) {
@@ -123,15 +138,16 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         }
         UUID cartId = cartContentList.get(0).getCart().getId();
         Optional<Cart> cart = cartRepository.findByUserId(cartId);
-      //  cart.get().setPrice(0.0);
+        //  cart.get().setPrice(0.0);
 
         cartContentRepository.deleteAll(cartContentList);
-       // cartRepository.save(cart.get());
+        // cartRepository.save(cart.get());
     }
 
     public PurchaseOrderResponseDTO makeResponseDto(PurchaseOrder purchaseOrder) {
         return PurchaseOrderResponseDTO.builder()
-                .user(purchaseOrder.getUser())
+                //.user(purchaseOrder.getUser())
+                .userName(purchaseOrder.getUser().getName())
                 .date(purchaseOrder.getDate())
                 .price(purchaseOrder.getPrice())
                 .build();
