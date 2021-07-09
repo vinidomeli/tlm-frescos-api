@@ -461,6 +461,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
+        <!-- Meli srping boot -->
+<!--        <dependency> <groupId>com.mercadolibre</groupId>-->
+<!--            <artifactId>spring-boot-starter</artifactId>-->
+<!--            <version>0.0.4</version>-->
+<!--        </dependency>-->
         <!-- Validacion de datos de SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -541,6 +547,18 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured-all</artifactId>
             <version>4.1.1</version>
+        </dependency>
+
+        <!--This connector version only works for JDK 8 or higher, if youre using an older JDK, please go to https://cutt.ly/9d1echX-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fury</groupId>
+            <artifactId>furyutils</artifactId>
+            <version>0.0.1</version>
         </dependency>
 
     </dependencies>

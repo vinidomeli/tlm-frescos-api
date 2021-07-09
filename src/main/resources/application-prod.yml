@@ -3,10 +3,10 @@
 
 spring:
   datasource:
-    host: DB_MYSQL_DESAENV04_DAMBETANDB_DAMBETANDB_ENDPOINT
-    db: dambetandb
-    username: dambetandb_WPROD
-    password: DB_MYSQL_DESAENV04_DAMBETANDB_DAMBETANDB_WPROD
+    host: DB_MYSQL_DESAENV04_G6FRESCOS_G6FRESCOS_ENDPOINT
+    db: g6frescos
+    username: ${LOCAL_DB_USER}
+    password: ${LOCAL_DB_PASS}
     initialization-mode: always
 
   jpa:
