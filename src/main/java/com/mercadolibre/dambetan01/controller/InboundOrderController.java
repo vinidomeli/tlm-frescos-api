@@ -27,23 +27,25 @@ public class InboundOrderController {
     WarehouseService warehouseService;
     SectionService sectionService;
     BatchService batchService;
+    UserService userService;
 
     public InboundOrderController(final InboundOrderService inboundOrderService, final ProductService productService,
                                   final WarehouseService warehouseService, final SectionService sectionService,
-                                  final BatchService batchService) {
+                                  final BatchService batchService, final UserService userService) {
         this.inboundOrderService = inboundOrderService;
         this.productService = productService;
         this.warehouseService = warehouseService;
         this.sectionService = sectionService;
         this.batchService = batchService;
+        this.userService = userService;
     }
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PostMapping(value = "/inboundorder")
     public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestHeader String token,
                                                                          @RequestBody @Valid InboundOrderRequestDTO inboundOrderRequestDTO) {
-
         String username = SessionServiceImpl.getUsername(token);
+        UUID userId = userService.findByLogin(username).getId();
         List<Long> productIds = inboundOrderRequestDTO.getBatchStock().stream()
                 .map(BatchStockDTO::getProductId)
                 .collect(Collectors.toList());
@@ -57,11 +59,11 @@ public class InboundOrderController {
 
         productService.productIdsInsideBatchStockExist(productIds);
         warehouseService.warehouseExists(warehouseCode);
+        warehouseService.warehouseContainsSupervisor(userId, warehouseCode);
         sectionService.sectionExists(sectionCode);
         sectionService.sectionBelongsToWarehouse(sectionCode, warehouseCode);
         sectionService.sectionMatchesProductType(sectionCode, productIds);
         sectionService.sectionHasSufficientSpace(totalInboundOrderSize, sectionCode);
-        //validar se o representante pertence ao armazem -> validacao de usuario
 
         BatchStockResponseDTO response = inboundOrderService.registerNewInboundOrder(inboundOrderRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
