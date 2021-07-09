@@ -1,5 +1,6 @@
 package com.mercadolibre.dambetan01.config;
 
+import com.mercadolibre.dambetan01.model.enums.Roles;
 import com.mercadolibre.dambetan01.security.JWTAuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
                 .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                 .antMatchers(HttpMethod.GET, "/fake").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/warehouse**").hasAuthority(Roles.SUPERVISOR.name())
                 .anyRequest().authenticated();
     }
 
@@ -32,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    protected void configure(HttpSecurity http) throws Exception {
 //        http.authorizeRequests()
 //                .antMatchers("/").permitAll()
-//                .antMatchers("/h2-console/**").permitAll()
+//               .antMatchers("/h2-console/**").permitAll()
 //                .antMatchers(HttpMethod.POST,"/api/v1/fresh-products/inboundorder").permitAll();
 //        http.csrf().disable();
 //        http.headers().frameOptions().disable();
