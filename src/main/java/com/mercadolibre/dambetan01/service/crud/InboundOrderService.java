@@ -15,5 +15,6 @@ public interface InboundOrderService {
     public void orderNumberExists(Long orderNumber);
     public void inboundOrderContainsSectionCode(Long orderNumber, UUID sectionCode);
     public void inboundOrderContainsBatchNumbers(Long orderNumber, List<Long> batchNumbers);
+    public Integer batchStockSizeDifferenceAfterUpdate(UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO);
 
 }

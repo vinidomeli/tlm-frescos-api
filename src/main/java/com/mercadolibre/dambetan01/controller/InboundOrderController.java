@@ -71,8 +71,10 @@ public class InboundOrderController {
 
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PutMapping("/inboundorder")
-    public ResponseEntity<BatchStockResponseDTO> updateInboundOrder(@RequestBody UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
-
+    public ResponseEntity<BatchStockResponseDTO> updateInboundOrder(@RequestHeader String token,
+                                                                    @RequestBody @Valid UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
+        String username = SessionServiceImpl.getUsername(token);
+        UUID userId = userService.findByLogin(username).getId();
         List<Long> productIds = updateInboundOrderRequestDTO.getBatchStock().stream()
                 .map(UpdateBatchStockDTO::getProductId)
                 .collect(Collectors.toList());
@@ -81,9 +83,8 @@ public class InboundOrderController {
                 .map(UpdateBatchStockDTO::getBatchNumber)
                 .collect(Collectors.toList());
 
-        Integer totalInboundOrderSize = updateInboundOrderRequestDTO.getBatchStock().stream()
-                .map(UpdateBatchStockDTO::getCurrentQuantity)
-                .reduce(0, Integer::sum);
+        Integer batchStockSizeDifferenceAfterUpdate = inboundOrderService
+                .batchStockSizeDifferenceAfterUpdate(updateInboundOrderRequestDTO);
 
         UUID warehouseCode = updateInboundOrderRequestDTO.getSection().getWarehouseCode();
         UUID sectionCode = updateInboundOrderRequestDTO.getSection().getSectionCode();
@@ -94,9 +95,11 @@ public class InboundOrderController {
         inboundOrderService.inboundOrderContainsSectionCode(orderNumber, sectionCode);
         sectionService.sectionExists(sectionCode);
         warehouseService.warehouseExists(warehouseCode);
+        warehouseService.warehouseContainsSupervisor(userId, warehouseCode);
         sectionService.sectionBelongsToWarehouse(sectionCode, warehouseCode);
+        productService.productIdsInsideBatchStockExist(productIds);
         sectionService.sectionMatchesProductType(sectionCode, productIds);
-        sectionService.sectionHasSufficientSpace(totalInboundOrderSize, sectionCode);
+        sectionService.sectionHasSufficientSpace(batchStockSizeDifferenceAfterUpdate, sectionCode);
         batchService.batchNumbersExist(batchNumbers);
         inboundOrderService.inboundOrderContainsBatchNumbers(orderNumber, batchNumbers);
 

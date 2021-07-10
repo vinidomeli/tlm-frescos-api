@@ -2,6 +2,7 @@ package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.SectionDTO;
+import com.mercadolibre.dambetan01.dtos.UpdateBatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
@@ -51,25 +52,13 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     @Override
     public BatchStockResponseDTO updateInboundOrder(UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
 
-        Section section = sectionRepository.findBySectionCode(updateInboundOrderRequestDTO.getSection().getSectionCode());
-
         InboundOrder inboundOrder = inboundOrderRepository.findByOrderNumber(updateInboundOrderRequestDTO.getOrderNumber());
         inboundOrder.setOrderDate(updateInboundOrderRequestDTO.getOrderDate());
-        inboundOrder.setSection(section);
+        inboundOrderRepository.save(inboundOrder);
 
-        updateInboundOrderRequestDTO.getBatchStock().forEach(updateBatchStockDTO -> {
-            Batch batch = batchRepository.findBatchByBatchNumber(updateBatchStockDTO.getBatchNumber());
-            //productId can change?
-            batch.setCurrentTemperature(updateBatchStockDTO.getCurrentTemperature());
-            batch.setMinimumTemperature(updateBatchStockDTO.getMinimumTemperature());
-            //initialQuantity can change?
-            batch.setCurrentQuantity(updateBatchStockDTO.getCurrentQuantity());
-            batch.setManufacturingDate(updateBatchStockDTO.getManufacturingDate());
-            batch.setManufacturingTime(updateBatchStockDTO.getManufacturingTime());
-            batch.setDueDate(updateBatchStockDTO.getDueDate());
-
-            batchRepository.save(batch);
-        });
+        Integer sizeDifferenceAfterUpdate = batchStockSizeDifferenceAfterUpdate(updateInboundOrderRequestDTO);
+        saveBatchStock(updateInboundOrderRequestDTO);
+        updateSectionCurrentSize(updateInboundOrderRequestDTO, sizeDifferenceAfterUpdate);
 
         return inboundOrderToBatchStockResponseDTO(inboundOrder);
     }
@@ -151,6 +140,22 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                 });
     }
 
+    public void saveBatchStock(UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
+        updateInboundOrderRequestDTO.getBatchStock().forEach(updateBatchStockDTO -> {
+            Batch batch = batchRepository.findBatchByBatchNumber(updateBatchStockDTO.getBatchNumber());
+            //productId can change?
+            batch.setCurrentTemperature(updateBatchStockDTO.getCurrentTemperature());
+            batch.setMinimumTemperature(updateBatchStockDTO.getMinimumTemperature());
+            //initialQuantity can change?
+            batch.setCurrentQuantity(updateBatchStockDTO.getCurrentQuantity());
+            batch.setManufacturingDate(updateBatchStockDTO.getManufacturingDate());
+            batch.setManufacturingTime(updateBatchStockDTO.getManufacturingTime());
+            batch.setDueDate(updateBatchStockDTO.getDueDate());
+
+            batchRepository.save(batch);
+        });
+    }
+
     public void updateSectionCurrentSize(InboundOrderRequestDTO inboundOrderRequestDTO) {
         UUID sectionCode = inboundOrderRequestDTO.getSection().getSectionCode();
         Integer totalInboundOrderSize = inboundOrderRequestDTO.getBatchStock().stream()
@@ -162,6 +167,21 @@ public class InboundOrderServiceImpl implements InboundOrderService {
         sectionRepository.save(section);
     }
 
+    public void updateSectionCurrentSize(UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO,
+                                         Integer sizeDifferenceAfterUpdate) {
+        UUID sectionCode = updateInboundOrderRequestDTO.getSection().getSectionCode();
+        Section section = sectionRepository.findBySectionCode(sectionCode);
+        Integer updatedCurrentSize = section.getCurrentSize() + sizeDifferenceAfterUpdate;
+        section.setCurrentSize(updatedCurrentSize);
+        sectionRepository.save(section);
+    }
 
+    @Override
+    public Integer batchStockSizeDifferenceAfterUpdate(UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
+        return updateInboundOrderRequestDTO.getBatchStock().stream()
+                .map(updateBatchStockDTO -> updateBatchStockDTO.getCurrentQuantity() -
+                        batchRepository.findBatchByBatchNumber(updateBatchStockDTO.getBatchNumber()).getCurrentQuantity())
+                .reduce(0, Integer::sum);
+    }
 
 }
