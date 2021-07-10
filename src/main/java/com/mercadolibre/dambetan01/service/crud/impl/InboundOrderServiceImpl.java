@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
+import com.mercadolibre.dambetan01.dtos.SectionDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
@@ -12,6 +13,7 @@ import com.mercadolibre.dambetan01.repository.BatchRepository;
 import com.mercadolibre.dambetan01.repository.InboundOrderRepository;
 import com.mercadolibre.dambetan01.repository.SectionRepository;
 import com.mercadolibre.dambetan01.service.crud.InboundOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     public BatchStockResponseDTO registerNewInboundOrder(InboundOrderRequestDTO inboundOrderRequestDTO) {
         InboundOrder registeredInboundOrder = saveInboundOrder(inboundOrderRequestDTO);
         saveBatchStock(inboundOrderRequestDTO, registeredInboundOrder);
+        updateSectionCurrentSize(inboundOrderRequestDTO);
 
         return inboundOrderToBatchStockResponseDTO(registeredInboundOrder);
     }
@@ -147,5 +150,18 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                     batchRepository.save(batch);
                 });
     }
+
+    public void updateSectionCurrentSize(InboundOrderRequestDTO inboundOrderRequestDTO) {
+        UUID sectionCode = inboundOrderRequestDTO.getSection().getSectionCode();
+        Integer totalInboundOrderSize = inboundOrderRequestDTO.getBatchStock().stream()
+                .map(BatchStockDTO::getCurrentQuantity)
+                .reduce(0, Integer::sum);
+        Section section = sectionRepository.findBySectionCode(sectionCode);
+        Integer updatedCurrentSize = section.getCurrentSize() + totalInboundOrderSize;
+        section.setCurrentSize(updatedCurrentSize);
+        sectionRepository.save(section);
+    }
+
+
 
 }

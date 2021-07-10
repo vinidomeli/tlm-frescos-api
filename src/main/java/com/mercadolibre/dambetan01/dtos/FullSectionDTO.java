@@ -26,6 +26,8 @@ public class FullSectionDTO {
 
     private UUID warehouseCode;
 
+    private String supervisorLogin;
+
     public static FullSectionDTO toDTO(Section section) {
         return FullSectionDTO.builder()
                 .sectionCode(section.getSectionCode())
@@ -34,6 +36,7 @@ public class FullSectionDTO {
                 .temperature(section.getTemperature())
                 .currentSize(section.getCurrentSize())
                 .warehouseCode(section.getWarehouse().getWarehouseCode())
+                .supervisorLogin(section.getWarehouse().getSupervisor().getUser().getLogin())
                 .build();
     }
 }
