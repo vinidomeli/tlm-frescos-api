@@ -43,12 +43,31 @@ public class Application {
 		SectionDB sectionDB = new SectionDB(warehouseRepository, sectionRepository);
 		WarehouseDB warehouseDB = new WarehouseDB(warehouseRepository, supervisorRepository);
 
-		for(int i = 0; i < 100; i++) {
-			Long registerNumber = userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
-			String CNPJ = userDB.insertSeller(userDB.insertUser(Roles.SELLER));
-			UUID warehouseCode = warehouseDB.insertWarehouse(registerNumber);
-			productDB.insertProduct(CNPJ, ProductType.REFRIGERATE);
+//		for(int i = 0; i < 100; i++) {
+//			Long registerNumber = userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
+//			String CNPJ = userDB.insertSeller(userDB.insertUser(Roles.SELLER));
+//			UUID warehouseCode = warehouseDB.insertWarehouse(registerNumber);
+//			productDB.insertProduct(CNPJ, ProductType.REFRIGERATE);
+//			sectionDB.insertSection(ProductType.REFRIGERATE, warehouseCode);
+//		}
+
+		Long registerNumber = userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
+		UUID warehouseCode = warehouseDB.insertWarehouse(registerNumber);
+		for (int i = 0; i < 2; i++) {
 			sectionDB.insertSection(ProductType.REFRIGERATE, warehouseCode);
+			sectionDB.insertSection(ProductType.DRINKS, warehouseCode);
+			sectionDB.insertSection(ProductType.FRUITS, warehouseCode);
+			sectionDB.insertSection(ProductType.FROZEN, warehouseCode);
+		}
+
+		for (int i = 0; i < 5; i++) {
+			String CNPJ = userDB.insertSeller(userDB.insertUser(Roles.SELLER));
+			for(int j = 0; j < 5; j++) {
+				productDB.insertProduct(CNPJ, ProductType.REFRIGERATE);
+				productDB.insertProduct(CNPJ, ProductType.DRINKS);
+				productDB.insertProduct(CNPJ, ProductType.FROZEN);
+				productDB.insertProduct(CNPJ, ProductType.FRUITS);
+			}
 		}
 
 	}

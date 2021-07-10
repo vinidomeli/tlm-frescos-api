@@ -8,6 +8,7 @@ db/*
 
 #Mac things
 .DS_Store
+dambetan01.iml
 
 # User-specific stuff
 .idea/**/workspace.xml

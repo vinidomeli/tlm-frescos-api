@@ -5,6 +5,10 @@ import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.exceptions.ValidationError;
 import com.newrelic.api.agent.NewRelic;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.w3c.dom.Node;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +39,19 @@ public class ControllerExceptionHandler {
 				.stream()
 				.map(this::mapError)
 				.collect(Collectors.toList());
+	}
+
+	@ExceptionHandler
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ValidationError handleException(ConstraintViolationException ex) {
+		String violationMessage = ex.getConstraintViolations().iterator().next().getMessage();
+		ConstraintViolation<?> violation = ex.getConstraintViolations().iterator().next();
+		String violatedField = null;
+		for (Path.Node node : violation.getPropertyPath()) {
+			violatedField = node.getName();
+		}
+		return new ValidationError(violatedField, violationMessage);
 	}
 
 	@ExceptionHandler

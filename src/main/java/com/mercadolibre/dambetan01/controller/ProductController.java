@@ -1,7 +1,6 @@
 package com.mercadolibre.dambetan01.controller;
 
 import com.mercadolibre.dambetan01.dtos.response.ProductResponseDTO;
-import com.mercadolibre.dambetan01.dtos.response.PurchaseOrderDetailDTO;
 import com.mercadolibre.dambetan01.service.crud.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/fresh-products")
-public class PurchaseController {
+public class ProductController {
 
-    PurchaseService purchaseService;
+    ProductService productService;
 
-    public PurchaseController(final PurchaseService purchaseService) {
-        this.purchaseService = purchaseService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     //ml-add-product ts-to-cart-01
@@ -24,7 +23,7 @@ public class PurchaseController {
     //@PreAuthorize("hasAnyRole('BUYER')")
     @GetMapping("/")
     public ResponseEntity<List<ProductResponseDTO>> listAllProducts() {
-      List<ProductResponseDTO> productsList = purchaseService.listAllProducts();
+      List<ProductResponseDTO> productsList = productService.listAllProducts();
       return new ResponseEntity<>(productsList, HttpStatus.OK);
     }
 
@@ -33,16 +32,8 @@ public class PurchaseController {
     //@PreAuthorize("hasAnyRole('BUYER')")
     @GetMapping("/list")
     public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam String productType) {
-        List<ProductResponseDTO> productsType = purchaseService.listProductsByCategory(productType);
+        List<ProductResponseDTO> productsType = productService.listProductsByCategory(productType);
         return new ResponseEntity<>(productsType, HttpStatus.OK);
     }
 
-    // ml-add-product ts-to-cart-01
-    //[REQ-02] GET: List of purchase order products
-    //@PreAuthorize("hasAnyRole('BUYER')")
-    @GetMapping("/orders")
-    public ResponseEntity<List<PurchaseOrderDetailDTO>> listOrderProducts(@RequestParam Long orderId) {
-        List<PurchaseOrderDetailDTO> purchaseOrderDetails = purchaseService.listPurchaseOrderProducts(orderId);
-        return new ResponseEntity<>(purchaseOrderDetails, HttpStatus.OK);
-    }
 }
