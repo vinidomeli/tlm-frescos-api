@@ -44,7 +44,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-launcher:1.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-runner:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.13.1" level="project" />
-    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:2.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-suite-api:1.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:2.4.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:2.4.2" level="project" />
@@ -212,25 +211,23 @@
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.16" level="project" />
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.javafaker:javafaker:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:android:1.23" level="project" />
-    <orderEntry type="library" name="Maven: com.github.mifmif:generex:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: dk.brics.automaton:automaton:1.11-8" level="project" />
-    <orderEntry type="library" name="Maven: io.rest-assured:rest-assured:4.1.1" level="project" />
+    <orderEntry type="library" name="Maven: io.rest-assured:rest-assured:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy:2.5.14" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-xml:2.5.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.13" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.14" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.13" level="project" />
+    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-library:2.2" level="project" />
     <orderEntry type="library" name="Maven: org.ccil.cowan.tagsoup:tagsoup:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: io.rest-assured:json-path:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: io.rest-assured:xml-path:3.3.0" level="project" />
-    <orderEntry type="library" name="Maven: io.rest-assured:rest-assured-common:4.1.1" level="project" />
-    <orderEntry type="library" name="Maven: io.rest-assured:rest-assured-all:4.1.1" level="project" />
+    <orderEntry type="library" name="Maven: io.rest-assured:rest-assured-common:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: io.rest-assured:rest-assured-all:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:javax.activation-api:1.2.0" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-osgi:2.3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-osgi:2.2.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.sling:org.apache.sling.javax.activation:0.1.0" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-json:2.5.14" level="project" />

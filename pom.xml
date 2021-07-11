@@ -58,6 +58,16 @@
                 </configuration>
             </plugin>
 
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--                <version>3.8.1</version>-->
+            <!--                <configuration>-->
+            <!--                    <source>${java.compiler.version}</source>-->
+            <!--                    <target>${java.compiler.version}</target>-->
+            <!--                    <optimize>true</optimize>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -76,6 +86,36 @@
                 <!-- </configuration> -->
             </plugin>
 
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-enforcer-plugin</artifactId>-->
+            <!--                <version>3.0.0-M3</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>enforce-versions</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>enforce</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--                    <rules>-->
+            <!--                        <bannedPlugins>-->
+            <!--                            <level>WARN</level>-->
+            <!--                            <excludes>-->
+            <!--                                <exclude>org.apache.maven.plugins:maven-verifier-plugin</exclude>-->
+            <!--                            </excludes>-->
+            <!--                        </bannedPlugins>-->
+            <!--                        <requireJavaVersion>-->
+            <!--                            <version>${java.compiler.version}.0</version>-->
+            <!--                        </requireJavaVersion>-->
+            <!--                        <requireMavenVersion>-->
+            <!--                            <version>3.3.0</version>-->
+            <!--                        </requireMavenVersion>-->
+            <!--                        <DependencyConvergence/>-->
+            <!--                    </rules>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -461,6 +501,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
+        <!-- Meli srping boot -->
+        <!--        <dependency> <groupId>com.mercadolibre</groupId>-->
+        <!--            <artifactId>spring-boot-starter</artifactId>-->
+        <!--            <version>0.0.4</version>-->
+        <!--        </dependency>-->
         <!-- Validacion de datos de SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -520,28 +566,47 @@
             <version>0.9.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>1.0.2</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.javafaker</groupId>-->
+        <!--            <artifactId>javafaker</artifactId>-->
+        <!--            <version>1.0.2</version>-->
+        <!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>4.1.1</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured-common</artifactId>
-            <version>4.1.1</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured-all</artifactId>
-            <version>4.1.1</version>
+            <version>3.3.0</version>
         </dependency>
+
+        <!--This connector version only works for JDK 8 or higher, if youre using an older JDK, please go to https://cutt.ly/9d1echX-->
+        <!--        <dependency>-->
+        <!--            <groupId>mysql</groupId>-->
+        <!--            <artifactId>mysql-connector-java</artifactId>-->
+        <!--            <version>8.0.16</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.fury</groupId>-->
+        <!--            <artifactId>furyutils</artifactId>-->
+        <!--            <version>0.0.1</version>-->
+        <!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/org.webjars/swagger-ui -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.webjars</groupId>-->
+        <!--            <artifactId>swagger-ui</artifactId>-->
+        <!--            <version>3.38.0</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 </project>
