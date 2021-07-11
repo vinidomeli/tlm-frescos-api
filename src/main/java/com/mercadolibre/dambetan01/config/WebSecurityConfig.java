@@ -4,6 +4,7 @@ import com.mercadolibre.dambetan01.model.enums.Roles;
 import com.mercadolibre.dambetan01.security.JWTAuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,11 +19,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/register/seller").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/sign-in").permitAll()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
                 .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                 .antMatchers(HttpMethod.GET, "/fake").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/warehouse**").hasAuthority(Roles.SUPERVISOR.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/fresh-products/product**").hasAuthority(Roles.SELLER.name())
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/myproducts**").hasAuthority(Roles.SELLER.name())
                 .anyRequest().authenticated();
     }
 

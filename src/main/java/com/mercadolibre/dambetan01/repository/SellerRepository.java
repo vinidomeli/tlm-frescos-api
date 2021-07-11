@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface SellerRepository extends JpaRepository<Seller, UUID> {
 
     Optional<Seller> findByCnpj(String cnpj);
+    Optional<Seller> findByUser_Id(UUID userId);
 
 }

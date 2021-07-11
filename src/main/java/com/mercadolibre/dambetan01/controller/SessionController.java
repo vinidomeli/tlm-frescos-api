@@ -1,6 +1,7 @@
 package com.mercadolibre.dambetan01.controller;
 
 import com.mercadolibre.dambetan01.dtos.AuthDTO;
+import com.mercadolibre.dambetan01.dtos.SellerDTO;
 import com.mercadolibre.dambetan01.dtos.UserDTO;
 import com.mercadolibre.dambetan01.dtos.response.AccountResponseDTO;
 import com.mercadolibre.dambetan01.service.ISessionService;
@@ -30,6 +31,13 @@ public class SessionController {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
         UserDTO response = userService.create(userDTO);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/register/seller")
+    public ResponseEntity<SellerDTO> registerSeller(@RequestBody SellerDTO sellerDTO) {
+        SellerDTO response = userService.createSeller(sellerDTO);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
