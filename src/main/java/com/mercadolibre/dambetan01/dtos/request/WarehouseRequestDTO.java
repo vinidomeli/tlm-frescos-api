@@ -6,6 +6,8 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +26,10 @@ public class WarehouseRequestDTO {
     @JsonProperty("login")
     @NotNull(message = "Supervisor login is required.")
     private String login;
+
+    @Valid
+    @JsonProperty("sections")
+    @NotNull(message = "Section is required.")
+    @Size(min = 1, message = "At least 1 section required.")
+    private List<SectionFromWarehouseRequestDTO> sections;
 }

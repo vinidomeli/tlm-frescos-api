@@ -3,13 +3,11 @@ package com.mercadolibre.dambetan01.controller;
 import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.UpdateBatchStockDTO;
 import com.mercadolibre.dambetan01.dtos.request.InboundOrderRequestDTO;
-import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderRequestDTO;
+import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
-import com.mercadolibre.dambetan01.model.User;
 import com.mercadolibre.dambetan01.service.crud.*;
 import com.mercadolibre.dambetan01.service.impl.SessionServiceImpl;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,23 +70,23 @@ public class InboundOrderController {
     //    ml-insert-batch-in-fulfillment-warehouse-01
     @PutMapping("/inboundorder")
     public ResponseEntity<BatchStockResponseDTO> updateInboundOrder(@RequestHeader String token,
-                                                                    @RequestBody @Valid UpdateInboundOrderRequestDTO updateInboundOrderRequestDTO) {
+                                                                    @RequestBody @Valid UpdateInboundOrderDTO updateInboundOrderDTO) {
         String username = SessionServiceImpl.getUsername(token);
         UUID userId = userService.findByLogin(username).getId();
-        List<Long> productIds = updateInboundOrderRequestDTO.getBatchStock().stream()
+        List<Long> productIds = updateInboundOrderDTO.getBatchStock().stream()
                 .map(UpdateBatchStockDTO::getProductId)
                 .collect(Collectors.toList());
 
-        List<Long> batchNumbers = updateInboundOrderRequestDTO.getBatchStock().stream()
+        List<Long> batchNumbers = updateInboundOrderDTO.getBatchStock().stream()
                 .map(UpdateBatchStockDTO::getBatchNumber)
                 .collect(Collectors.toList());
 
         Integer batchStockSizeDifferenceAfterUpdate = inboundOrderService
-                .batchStockSizeDifferenceAfterUpdate(updateInboundOrderRequestDTO);
+                .batchStockSizeDifferenceAfterUpdate(updateInboundOrderDTO);
 
-        UUID warehouseCode = updateInboundOrderRequestDTO.getSection().getWarehouseCode();
-        UUID sectionCode = updateInboundOrderRequestDTO.getSection().getSectionCode();
-        Long orderNumber = updateInboundOrderRequestDTO.getOrderNumber();
+        UUID warehouseCode = updateInboundOrderDTO.getSection().getWarehouseCode();
+        UUID sectionCode = updateInboundOrderDTO.getSection().getSectionCode();
+        Long orderNumber = updateInboundOrderDTO.getOrderNumber();
 
 
         inboundOrderService.orderNumberExists(orderNumber);
@@ -103,7 +101,15 @@ public class InboundOrderController {
         batchService.batchNumbersExist(batchNumbers);
         inboundOrderService.inboundOrderContainsBatchNumbers(orderNumber, batchNumbers);
 
-        BatchStockResponseDTO response = inboundOrderService.updateInboundOrder(updateInboundOrderRequestDTO);
+        BatchStockResponseDTO response = inboundOrderService.updateInboundOrder(updateInboundOrderDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/inboundorder/list")
+    public ResponseEntity<List<UpdateInboundOrderDTO>> listInboundOrderFromSupervisor(@RequestHeader String token) {
+        String username = SessionServiceImpl.getUsername(token);
+        UUID userId = userService.findByLogin(username).getId();
+        List<UpdateInboundOrderDTO> response = inboundOrderService.listInboundOrderFromSupervisor(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

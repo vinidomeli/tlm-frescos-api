@@ -44,6 +44,7 @@ public class ProductController {
         return new ResponseEntity<>(productsType, HttpStatus.OK);
     }
 
+    //Only Seller can register a new Product
     @PostMapping("/product")
     public ResponseEntity<ProductRegisterDTO> createProduct(@RequestHeader String token,
                                                             @RequestBody @Valid ProductRegisterDTO productRegisterDTO) {
@@ -54,6 +55,7 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    //Only Seller can see his products
     @GetMapping("/myproducts")
     public ResponseEntity<List<ProductFromSellerDTO>> listProductsFromSeller(@RequestHeader String token) {
         String username = SessionServiceImpl.getUsername(token);

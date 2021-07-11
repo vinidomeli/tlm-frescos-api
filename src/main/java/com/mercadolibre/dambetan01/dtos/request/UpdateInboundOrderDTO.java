@@ -3,10 +3,7 @@ package com.mercadolibre.dambetan01.dtos.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mercadolibre.dambetan01.dtos.UpdateBatchStockDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,7 +15,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateInboundOrderRequestDTO {
+@Builder
+public class UpdateInboundOrderDTO {
 
     @Valid
     @NotNull(message = "Order number is required.")

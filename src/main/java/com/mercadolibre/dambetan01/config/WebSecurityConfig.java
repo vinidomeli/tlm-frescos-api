@@ -25,8 +25,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                 .antMatchers(HttpMethod.GET, "/fake").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/warehouse**").hasAuthority(Roles.SUPERVISOR.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/warehouse**").hasAuthority(Roles.SUPERVISOR.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/fresh-products/product**").hasAuthority(Roles.SELLER.name())
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/myproducts**").hasAuthority(Roles.SELLER.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/fresh-products/inboundorder**").hasAuthority(Roles.SUPERVISOR.name())
+                .antMatchers(HttpMethod.PUT, "/api/v1/fresh-products/inboundorder**").hasAuthority(Roles.SUPERVISOR.name())
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/inboundorder**").hasAuthority(Roles.SUPERVISOR.name())
                 .anyRequest().authenticated();
     }
 

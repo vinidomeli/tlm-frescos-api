@@ -58,6 +58,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public SellerDTO createSeller(SellerDTO sellerDTO) {
+        boolean sellerExistsByCNPJ = sellerRepository.existsByCnpj(sellerDTO.getCnpj());
+        if(sellerExistsByCNPJ) {
+            throw new ApiException("400", "CNPJ already exists", 400);
+        }
+
         UserDTO userDTO = UserDTO.builder()
                 .login(sellerDTO.getLogin())
                 .name(sellerDTO.getName())

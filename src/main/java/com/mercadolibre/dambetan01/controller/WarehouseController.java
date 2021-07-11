@@ -28,7 +28,7 @@ public class WarehouseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/warehouse")
+    @PostMapping("/create")
     public ResponseEntity<WarehouseResponseDTO> registerWarehouse(@RequestBody @Valid WarehouseRequestDTO warehouseRequestDTO) {
         WarehouseResponseDTO response = this.warehouseService.registerWarehouse(warehouseRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
