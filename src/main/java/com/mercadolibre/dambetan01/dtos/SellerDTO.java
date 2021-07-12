@@ -1,7 +1,6 @@
 package com.mercadolibre.dambetan01.dtos;
 
 import com.mercadolibre.dambetan01.model.Seller;
-import com.mercadolibre.dambetan01.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

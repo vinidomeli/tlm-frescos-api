@@ -9,10 +9,10 @@ import java.util.UUID;
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, UUID> {
 
-    public boolean existsByWarehouseCode(UUID warehouseCode);
-    public Warehouse findByWarehouseCode(UUID warehouseCode);
-    public boolean existsBySupervisor_RegisterNumberAndWarehouseCode(Long registerNumber, UUID warehouseCode);
-    public boolean existsBySupervisor_RegisterNumber(Long registerNumber);
-//    public boolean findBySupervisor_RegisterNumberAndWarehouseCode(Long registerNumber, UUID warehouseCode);
+    boolean existsByWarehouseCode(UUID warehouseCode);
+    Warehouse findByWarehouseCode(UUID warehouseCode);
+    boolean existsBySupervisor_RegisterNumberAndWarehouseCode(Long registerNumber, UUID warehouseCode);
+    boolean existsBySupervisor_RegisterNumber(Long registerNumber);
+//    boolean findBySupervisor_RegisterNumberAndWarehouseCode(Long registerNumber, UUID warehouseCode);
 
 }

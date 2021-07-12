@@ -12,7 +12,6 @@ import com.mercadolibre.dambetan01.repository.SellerRepository;
 import com.mercadolibre.dambetan01.repository.SupervisorRepository;
 import com.mercadolibre.dambetan01.repository.UserRepository;
 import com.mercadolibre.dambetan01.service.crud.UserService;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
         User userSaved = userRepository.save(user);
 
-        if(role.getDescription() == "Supervisor") {
+        if(role.getDescription().equals("Supervisor")) {
             createSupervisorByUser(userSaved);
         }
 
