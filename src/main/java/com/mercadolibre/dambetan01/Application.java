@@ -38,10 +38,10 @@ public class Application {
 		new SpringApplicationBuilder(SpringConfig.class).registerShutdownHook(true)
 				.run(args);
 
-		UserDB userDB = new UserDB(userRepository, sellerRepository, supervisorRepository);
-		ProductDB productDB = new ProductDB(sellerRepository, productRepository);
-		SectionDB sectionDB = new SectionDB(warehouseRepository, sectionRepository);
-		WarehouseDB warehouseDB = new WarehouseDB(warehouseRepository, supervisorRepository);
+//		UserDB userDB = new UserDB(userRepository, sellerRepository, supervisorRepository);
+//		ProductDB productDB = new ProductDB(sellerRepository, productRepository);
+//		SectionDB sectionDB = new SectionDB(warehouseRepository, sectionRepository);
+//		WarehouseDB warehouseDB = new WarehouseDB(warehouseRepository, supervisorRepository);
 
 //		for(int i = 0; i < 100; i++) {
 //			Long registerNumber = userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
@@ -51,24 +51,24 @@ public class Application {
 //			sectionDB.insertSection(ProductType.REFRIGERATE, warehouseCode);
 //		}
 
-		Long registerNumber = userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
-		UUID warehouseCode = warehouseDB.insertWarehouse(registerNumber);
-		for (int i = 0; i < 2; i++) {
-			sectionDB.insertSection(ProductType.REFRIGERATE, warehouseCode);
-			sectionDB.insertSection(ProductType.DRINKS, warehouseCode);
-			sectionDB.insertSection(ProductType.FRUITS, warehouseCode);
-			sectionDB.insertSection(ProductType.FROZEN, warehouseCode);
-		}
-
-		for (int i = 0; i < 5; i++) {
-			String CNPJ = userDB.insertSeller(userDB.insertUser(Roles.SELLER));
-			for(int j = 0; j < 5; j++) {
-				productDB.insertProduct(CNPJ, ProductType.REFRIGERATE);
-				productDB.insertProduct(CNPJ, ProductType.DRINKS);
-				productDB.insertProduct(CNPJ, ProductType.FROZEN);
-				productDB.insertProduct(CNPJ, ProductType.FRUITS);
-			}
-		}
+//		Long registerNumber = userDB.insertSupervisor(userDB.insertUser(Roles.SUPERVISOR));
+//		UUID warehouseCode = warehouseDB.insertWarehouse(registerNumber);
+//		for (int i = 0; i < 2; i++) {
+//			sectionDB.insertSection(ProductType.REFRIGERATE, warehouseCode);
+//			sectionDB.insertSection(ProductType.DRINKS, warehouseCode);
+//			sectionDB.insertSection(ProductType.FRUITS, warehouseCode);
+//			sectionDB.insertSection(ProductType.FROZEN, warehouseCode);
+//		}
+//
+//		for (int i = 0; i < 5; i++) {
+//			String CNPJ = userDB.insertSeller(userDB.insertUser(Roles.SELLER));
+//			for(int j = 0; j < 5; j++) {
+//				productDB.insertProduct(CNPJ, ProductType.REFRIGERATE);
+//				productDB.insertProduct(CNPJ, ProductType.DRINKS);
+//				productDB.insertProduct(CNPJ, ProductType.FROZEN);
+//				productDB.insertProduct(CNPJ, ProductType.FRUITS);
+//			}
+//		}
 
 	}
 }

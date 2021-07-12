@@ -27,7 +27,7 @@ public class DataSourceConfig {
                 .username("sa")
                 .build();
     }
-/*
+
     @Bean
     @Qualifier("datasource")
     @Profile({"!local & !integration_test"})
@@ -45,7 +45,7 @@ public class DataSourceConfig {
                 .build();
     }
 
- */
+
 
     @Bean
     @Qualifier("datasource")

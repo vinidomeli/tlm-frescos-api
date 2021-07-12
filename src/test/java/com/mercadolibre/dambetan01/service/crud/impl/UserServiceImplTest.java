@@ -1,6 +1,6 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
-import com.github.javafaker.Faker;
+//import com.github.javafaker.Faker;
 import com.mercadolibre.dambetan01.dtos.UserDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.User;
@@ -32,20 +32,20 @@ class UserServiceImplTest {
     @InjectMocks
     UserServiceImpl userService;
 
-    private static Stream<Arguments> userDataProvider() {
-        Faker faker = new Faker();
-
-        UserDTO userDTO = UserDTO.builder()
-                .name(faker.name().fullName())
-                .login(faker.name().username())
-                .password(faker.internet().password())
-                .role(Roles.SELLER.getDescription())
-                .build();
-
-        return Stream.of(
-                Arguments.of(userDTO)
-        );
-    }
+//    private static Stream<Arguments> userDataProvider() {
+//        Faker faker = new Faker();
+//
+//        UserDTO userDTO = UserDTO.builder()
+//                .name(faker.name().fullName())
+//                .login(faker.name().username())
+//                .password(faker.internet().password())
+//                .role(Roles.SELLER.getDescription())
+//                .build();
+//
+//        return Stream.of(
+//                Arguments.of(userDTO)
+//        );
+//    }
 
     @ParameterizedTest
     @MethodSource("userDataProvider")
