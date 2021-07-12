@@ -19,14 +19,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequestDTO {
+
     @JsonIgnore
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "pt-BR", timezone = "UTC")
     private LocalDate date = LocalDate.now();
+
     @NotBlank
     private String buyerCpf;
+
     @NotBlank
     @Max(15)
     private String orderStatus;
+
     @NotNull
     private List<ProductDTO> products;
 }

@@ -16,6 +16,7 @@ import java.util.Objects;
 public class BatchStockResponseDTO {
 
     private Long orderNumber;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
     private List<BatchStockDTO> batchStock;

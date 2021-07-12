@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductBatchesResponseDTO {
 
-
     private SectionDTO sectionDTO;
     private Long productId;
     private List<BatchStockDTO> batchStock = new ArrayList<>();

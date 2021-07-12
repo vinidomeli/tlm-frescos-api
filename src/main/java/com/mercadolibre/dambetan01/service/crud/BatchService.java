@@ -12,16 +12,16 @@ import java.util.List;
 
 public interface BatchService {
 
-    public Batch convertBatchStockDTOToBatch(BatchStockDTO batchStockDTO, Long inboundOrder);
+    Batch convertBatchStockDTOToBatch(BatchStockDTO batchStockDTO, Long inboundOrder);
 
-    public void batchNumbersExist(List<Long> batchNumbers);
+    void batchNumbersExist(List<Long> batchNumbers);
 
-    public ProductInWarehousesDTO findProductInWarehousesBy(Long productID);
+    ProductInWarehousesDTO findProductInWarehousesBy(Long productID);
 
     Batch createBatch(Product product, InboundOrder inboundOrder);
 
-    public List<ProductBatchesResponseDTO> findBatchesByProductId(Long productId, String order) throws NotFoundException;
+    List<ProductBatchesResponseDTO> findBatchesByProductId(Long productId, String order) throws NotFoundException;
 
-    public List<Batch> findBatchesByProductId(Long productId);
+    List<Batch> findBatchesByProductId(Long productId);
 
 }

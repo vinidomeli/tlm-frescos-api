@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SectionRepository extends JpaRepository<Section, UUID> {
 
-    public boolean existsBySectionCode(UUID sectionCode);
-    public Section findBySectionCode(UUID sectionCode);
+    boolean existsBySectionCode(UUID sectionCode);
+    Section findBySectionCode(UUID sectionCode);
 }

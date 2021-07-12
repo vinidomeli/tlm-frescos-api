@@ -13,9 +13,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDTO {
+
     @NotNull
     private Long productId;
+
     @NotNull
     @Min(1)
     private Integer quantity;
+
 }

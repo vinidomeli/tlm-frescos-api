@@ -10,10 +10,10 @@ import java.util.UUID;
 
 public interface InboundOrderService {
 
-    public BatchStockResponseDTO registerNewInboundOrder(InboundOrderRequestDTO inboundOrderRequestDTO);
-    public BatchStockResponseDTO updateInboundOrder(UpdateInboundOrderRequestDTO inboundOrderRequestDTO);
-    public void orderNumberExists(Long orderNumber);
-    public void inboundOrderContainsSectionCode(Long orderNumber, UUID sectionCode);
-    public void inboundOrderContainsBatchNumbers(Long orderNumber, List<Long> batchNumbers);
+    BatchStockResponseDTO registerNewInboundOrder(InboundOrderRequestDTO inboundOrderRequestDTO);
+    BatchStockResponseDTO updateInboundOrder(UpdateInboundOrderRequestDTO inboundOrderRequestDTO);
+    void orderNumberExists(Long orderNumber);
+    void inboundOrderContainsSectionCode(Long orderNumber, UUID sectionCode);
+    void inboundOrderContainsBatchNumbers(Long orderNumber, List<Long> batchNumbers);
 
 }

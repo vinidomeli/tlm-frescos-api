@@ -9,6 +9,6 @@ import java.util.UUID;
 @Repository
 public interface InboundOrderRepository extends JpaRepository<InboundOrder, Long> {
 
-    public InboundOrder findByOrderNumber(Long orderNumber);
+    InboundOrder findByOrderNumber(Long orderNumber);
     boolean existsByOrderNumber(Long orderNumber);
 }
