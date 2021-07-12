@@ -130,19 +130,6 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         }
     }
 
-//    public void clearCart(List<CartContent> cartContentList) {
-//        boolean cartContentIsNullOrEmpty = cartContentList == null || cartContentList.isEmpty();
-//        if (cartContentIsNullOrEmpty) {
-//            throw new ApiException("404", "cart not found", 404);
-//        }
-//        UUID cartId = cartContentList.get(0).getCart().getId();
-//        Optional<Cart> cart = cartRepository.findById(cartId);
-//        cart.get().setPrice(0.0);
-//
-//        cartContentRepository.deleteAll(cartContentList);
-//        cartRepository.save(cart.get());
-//    }
-
     public PurchaseOrderResponseDTO makeResponseDto(PurchaseOrder purchaseOrder) {
         return PurchaseOrderResponseDTO.builder()
                 .userName(purchaseOrder.getUser().getName())
