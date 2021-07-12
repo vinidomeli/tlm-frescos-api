@@ -1,7 +1,8 @@
-package com.mercadolibre.dambetan01.service.impl;
+package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.WalletDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
+import com.mercadolibre.dambetan01.model.User;
 import com.mercadolibre.dambetan01.model.Wallet;
 import com.mercadolibre.dambetan01.repository.WalletRepository;
 import com.mercadolibre.dambetan01.service.crud.WalletService;
@@ -21,14 +22,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public WalletDTO add(UUID userId, BigInteger amount) {
-        boolean invalidAmount = amount.compareTo(BigInteger.ONE) < 0;
+        validateAmount(amount);
 
-        if (invalidAmount) {
-            throw new RuntimeException("Invalid amount. Cannot add " + amount + " amount to your wallet.");
-        }
-
-
-        Wallet wallet = this.walletRepository.findByUserId(userId)
+        Wallet wallet = this.walletRepository.findByUser_Id(userId)
                 .orElseThrow(() -> new ApiException("404", "Wallet not found.", 404));
 
         BigInteger currentBalance = wallet.getBalance();
@@ -41,7 +37,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public WalletDTO deduct(UUID userId, BigInteger amount) {
-        Wallet wallet = this.walletRepository.findByUserId(userId)
+        validateAmount(amount);
+
+        Wallet wallet = this.walletRepository.findByUser_Id(userId)
                 .orElseThrow(() -> new ApiException("404", "Wallet not found.", 404));
 
         BigInteger currentBalance = wallet.getBalance();
@@ -50,7 +48,7 @@ public class WalletServiceImpl implements WalletService {
         boolean balanceLowerThanZero = finalBalance.compareTo(BigInteger.ZERO) < 0;
 
         if (balanceLowerThanZero) {
-            throw new RuntimeException("Insufficient balance.");
+            throw new ApiException("400", "Insufficient balance.", 400);
         }
 
         wallet.setBalance(finalBalance);
@@ -60,9 +58,26 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public WalletDTO findBy(UUID userID) {
-        Wallet wallet = this.walletRepository.findByUserId(userID)
-                .orElseThrow(() -> new ApiException("404", "Wallet not found.", 404));
+        User user = User.builder()
+                .id(userID)
+                .build();
+
+        Wallet newWallet = Wallet.builder()
+                .user(user)
+                .balance(BigInteger.ZERO)
+                .build();
+
+        Wallet wallet = this.walletRepository.findByUser_Id(userID)
+                .orElseGet(() -> this.walletRepository.save(newWallet));
 
         return WalletDTO.toDTO(wallet);
+    }
+
+    protected void validateAmount(BigInteger amount) {
+        boolean invalidAmount = amount.compareTo(BigInteger.ONE) < 0;
+
+        if (invalidAmount) {
+            throw new ApiException("400", "Invalid amount. Cannot add or deduct an  " + amount + " amount to your wallet.", 400);
+        }
     }
 }

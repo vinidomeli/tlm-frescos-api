@@ -22,7 +22,8 @@ public class Wallet implements Serializable {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "fk_user", referencedColumnName = "id")
     private User user;
 
     private BigInteger balance;
