@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/purchase-order")
+@RequestMapping("/api/v1/purchase-order")
 @Tag(name = "Purchase Order Operations")
 public class PurchaseOrderController {
 
