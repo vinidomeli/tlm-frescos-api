@@ -3,7 +3,6 @@ package com.mercadolibre.dambetan01.controller;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockDueDateDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductBatchesResponseDTO;
 import com.mercadolibre.dambetan01.service.crud.BatchService;
-import com.mercadolibre.dambetan01.service.crud.ProductService;
 import com.mercadolibre.dambetan01.service.crud.WarehouseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +24,13 @@ import java.util.List;
 public class BatchController {
 
     private final BatchService batchService;
-    private final ProductService productService;
     private final WarehouseService warehouseService;
 
-    public BatchController(BatchService batchService, ProductService productService, WarehouseService warehouseService) {
+    public BatchController(BatchService batchService, WarehouseService warehouseService) {
         this.batchService = batchService;
-        this.productService = productService;
         this.warehouseService = warehouseService;
     }
+
 
     @Operation(summary = "Get batches by product id", description = "Get all batches where the product is valid")
     @GetMapping(value = "/list")

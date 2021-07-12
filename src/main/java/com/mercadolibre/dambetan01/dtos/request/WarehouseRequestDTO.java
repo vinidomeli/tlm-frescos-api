@@ -1,7 +1,6 @@
 package com.mercadolibre.dambetan01.dtos.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mercadolibre.dambetan01.model.Supervisor;
 import lombok.*;
 
 import javax.validation.Valid;

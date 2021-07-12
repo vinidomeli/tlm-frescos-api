@@ -1,6 +1,5 @@
 package com.mercadolibre.dambetan01.model;
 
-import com.mercadolibre.dambetan01.model.enums.Reputation;
 import lombok.*;
 
 import javax.persistence.*;

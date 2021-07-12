@@ -57,8 +57,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> modelMapper.map(product, ProductResponseDTO.class))
                 .collect(Collectors.toList());
 
-        // @TODO: Customizar exception
-        if (productList.size() == 0) {
+        if (productList.isEmpty()) {
             throw new ApiException("404", "Product's list is empty.", 404);
         }
 
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> modelMapper.map(product, ProductResponseDTO.class))
                 .collect(Collectors.toList());
 
-        if (productsTypeList.size() == 0) {
+        if (productsTypeList.isEmpty()) {
             throw new ApiException("404", "There is not any product registered for this type.", 404);
         }
         return productsTypeList;

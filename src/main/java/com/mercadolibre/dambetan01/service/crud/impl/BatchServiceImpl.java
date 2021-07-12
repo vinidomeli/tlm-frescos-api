@@ -83,7 +83,13 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch convertBatchStockDTOToBatch(BatchStockDTO batchStockDTO, Long inboundOrderNumber) {
 
-        Product product = this.productRepository.findById(batchStockDTO.getProductId()).get();
+        Optional<Product> productOptional = this.productRepository.findById(batchStockDTO.getProductId());
+
+        if(!productOptional.isPresent()) {
+            return null;
+        }
+
+        Product product = productOptional.get();
         InboundOrder inboundOrder = this.inboundOrderRepository.findByOrderNumber(inboundOrderNumber);
 
         return Batch.builder()
