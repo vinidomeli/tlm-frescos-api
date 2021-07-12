@@ -27,7 +27,7 @@ public class DataSourceConfig {
                 .username("sa")
                 .build();
     }
-/*
+
     @Bean
     @Qualifier("datasource")
     @Profile({"!local & !integration_test"})
@@ -44,8 +44,6 @@ public class DataSourceConfig {
                 .password(FuryUtils.getEnv(password))
                 .build();
     }
-
- */
 
     @Bean
     @Qualifier("datasource")
