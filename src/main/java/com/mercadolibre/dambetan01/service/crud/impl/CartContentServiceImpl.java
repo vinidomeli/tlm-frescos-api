@@ -4,7 +4,10 @@ import com.mercadolibre.dambetan01.dtos.request.CartContentRequestDTO;
 import com.mercadolibre.dambetan01.dtos.response.CartContentResponseDTO;
 import com.mercadolibre.dambetan01.dtos.response.CartResponseDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
-import com.mercadolibre.dambetan01.model.*;
+import com.mercadolibre.dambetan01.model.Cart;
+import com.mercadolibre.dambetan01.model.CartContent;
+import com.mercadolibre.dambetan01.model.Product;
+import com.mercadolibre.dambetan01.model.User;
 import com.mercadolibre.dambetan01.repository.CartContentRepository;
 import com.mercadolibre.dambetan01.repository.CartRepository;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
@@ -24,7 +27,8 @@ public class CartContentServiceImpl implements CartContentService {
     CartContentRepository cartContentRepository;
     ProductRepository productRepository;
 
-    public CartContentServiceImpl(CartRepository cartRepository, CartContentRepository cartContentRepository,
+    public CartContentServiceImpl(CartRepository cartRepository,
+                                  CartContentRepository cartContentRepository,
                                   ProductRepository productRepository) {
         this.cartRepository = cartRepository;
         this.cartContentRepository = cartContentRepository;
@@ -36,14 +40,10 @@ public class CartContentServiceImpl implements CartContentService {
         Product product = getProduct(cartContentRequestDTO.getProductId());
         Cart cart = getCart(userId);
         Integer quantity = cartContentRequestDTO.getQuantity();
+        quantityEqualToZero(quantity);
 
         CartContent cartContent = getCartContent(quantity, cart, product);
         cartContentRepository.save(cartContent);
-//        if (cart.getPrice() == null) {
-//            cart.setPrice(0.0);
-//        }
-////        Double updatedPrice = //cart.getPrice() +
-////                (cartContent.getQuantity() * cartContent.getProduct().getPrice());
         Double updatedPrice = getTotalPrice(cart);
         cart.setPrice(updatedPrice);
         cartRepository.save(cart);
@@ -77,8 +77,19 @@ public class CartContentServiceImpl implements CartContentService {
     }
 
     @Override
-    public CartResponseDTO listAllCarts(UUID userId) {
+    public CartResponseDTO clearCart(UUID userId) {
         Cart cart = getCartIfExists(userId);
+        List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
+        cart = clearCartByContentList(cartContentList);
+
+        CartResponseDTO cartResponseDTO = toDto(cart);
+
+        return cartResponseDTO;
+    }
+
+    @Override
+    public CartResponseDTO viewCart(UUID userId) {
+        Cart cart = getCart(userId);
         List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
         List<CartContentResponseDTO> cartContentResponseDTOList = cartContentList.stream()
                 .map(CartContentResponseDTO::toDto).collect(Collectors.toList());
@@ -90,11 +101,11 @@ public class CartContentServiceImpl implements CartContentService {
                 .build();
     }
 
-    public Double getTotalPrice(Cart cart){
+    public Double getTotalPrice(Cart cart) {
         Double totalPrice = 0.0;
 
         List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
-        for (CartContent cartContent : cartContentList){
+        for (CartContent cartContent : cartContentList) {
             totalPrice += cartContent.getQuantity() * cartContent.getProduct().getPrice();
         }
         return totalPrice;
@@ -103,9 +114,16 @@ public class CartContentServiceImpl implements CartContentService {
     public CartContent getCartContent(Integer quantity, Cart cart, Product product) {
         CartContent cartContent = cartContentRepository.findByProductAndCart(product, cart);
         if (cartContent == null) {
+            if (quantity < 0) {
+                throw new ApiException("400", "the initial quantity cannot be less than one", 400);
+            }
             return createCartContent(quantity, cart, product);
         }
-        cartContent.setQuantity(cartContent.getQuantity() + quantity);
+        Integer newQuantity = cartContent.getQuantity() + quantity;
+        if (newQuantity < 1) {
+            throw new ApiException("400", "the new quantity cannot be less than one", 400);
+        }
+        cartContent.setQuantity(newQuantity);
         return cartContent;
     }
 
@@ -143,9 +161,28 @@ public class CartContentServiceImpl implements CartContentService {
                 .orElseGet(() -> cartRepository.save(cart));
     }
 
+    public void quantityEqualToZero(Integer quantity) {
+        if (quantity == 0) {
+            throw new ApiException("400", "quantity could be not equal to zero", 400);
+        }
+    }
+
     public Cart getCartIfExists(UUID userId) {
         return cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new ApiException("404", "cart not found", 404));
+    }
+
+    public Cart clearCartByContentList(List<CartContent> cartContentList) {
+        boolean cartContentIsNullOrEmpty = cartContentList == null || cartContentList.isEmpty();
+        if (cartContentIsNullOrEmpty) {
+            throw new ApiException("404", "cart not found", 404);
+        }
+        UUID cartId = cartContentList.get(0).getCart().getId();
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        cart.get().setPrice(0.0);
+
+        cartContentRepository.deleteAll(cartContentList);
+        return cartRepository.save(cart.get());
     }
 
     /*

@@ -52,14 +52,13 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         Double totalPrice = getTotalPrice(purchaseOrderContentList);
         purchaseOrder.setDate(LocalDate.now());
         purchaseOrder.setPrice(totalPrice);
-        // TODO : settar o user
         Optional<User> user = userRepository.findById(userId);
         purchaseOrder.setUser(user.get());
         purchaseOrderRepository.save(purchaseOrder);
         purchaseOrderContentRepository.saveAll(purchaseOrderContentList);
 
         subtractBatchesQuantity(cartContentList);
-        clearCart(cartContentList);
+        cartContentServiceImpl.clearCartByContentList(cartContentList);
 
         return makeResponseDto(purchaseOrder);
     }
@@ -99,8 +98,8 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
             Integer actualQuantity = getActualQuantityInBatch(batchList);
             boolean insufficientQuantity = cartContent.getQuantity() > actualQuantity;
             if (insufficientQuantity) {
-                insufficientProductList.add("quantidade do produto: " + product.getType() + " insuficiente "
-                        + " quantidade pedida: " + cartContent.getQuantity() + " em estoque: " + actualQuantity);
+                insufficientProductList.add("product quantity: " + product.getType() + " insufficient "
+                        + " quantity demanded: " + cartContent.getQuantity() + " in stock: " + actualQuantity);
             } else {
                 purchaseOrderContentList.add(buildPurchaseOrderContent(cartContent, purchaseOrder));
             }
@@ -131,22 +130,21 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         }
     }
 
-    public void clearCart(List<CartContent> cartContentList) {
-        boolean cartContentIsNullOrEmpty = cartContentList == null || cartContentList.isEmpty();
-        if (cartContentIsNullOrEmpty) {
-            throw new ApiException("404", "cart not found", 404);
-        }
-        UUID cartId = cartContentList.get(0).getCart().getId();
-        Optional<Cart> cart = cartRepository.findByUserId(cartId);
-        //  cart.get().setPrice(0.0);
-
-        cartContentRepository.deleteAll(cartContentList);
-        // cartRepository.save(cart.get());
-    }
+//    public void clearCart(List<CartContent> cartContentList) {
+//        boolean cartContentIsNullOrEmpty = cartContentList == null || cartContentList.isEmpty();
+//        if (cartContentIsNullOrEmpty) {
+//            throw new ApiException("404", "cart not found", 404);
+//        }
+//        UUID cartId = cartContentList.get(0).getCart().getId();
+//        Optional<Cart> cart = cartRepository.findById(cartId);
+//        cart.get().setPrice(0.0);
+//
+//        cartContentRepository.deleteAll(cartContentList);
+//        cartRepository.save(cart.get());
+//    }
 
     public PurchaseOrderResponseDTO makeResponseDto(PurchaseOrder purchaseOrder) {
         return PurchaseOrderResponseDTO.builder()
-                //.user(purchaseOrder.getUser())
                 .userName(purchaseOrder.getUser().getName())
                 .date(purchaseOrder.getDate())
                 .price(purchaseOrder.getPrice())
@@ -165,8 +163,6 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
     }
 
     public void runBatchesByProduct(List<Batch> batchList, Integer necessaryQuantity) {
-        // TODO: o que é melhor? isso abaixo ou
-        //  criar um if dentro do for para verificar se a quantidade necessária ja foi atingida (a cada iteração)
         while (necessaryQuantity != 0) {
             for (Batch batch : batchList) {
                 Integer batchQuantity = batch.getCurrentQuantity();
@@ -201,7 +197,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
     }
 
     public List<Batch> filterBatchesByDueDate(List<Batch> batchList) {
-        LocalDate unexpiredDate = LocalDate.now().minusWeeks(3);
+        LocalDate unexpiredDate = LocalDate.now().plusWeeks(3);
         return batchList.stream()
                 .filter(batch -> batch.getDueDate().isAfter(unexpiredDate))
                 .collect(Collectors.toList());
