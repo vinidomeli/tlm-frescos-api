@@ -1,7 +1,10 @@
 package com.mercadolibre.dambetan01.model;
 
+import com.mercadolibre.dambetan01.dtos.SectionDTO;
+import com.mercadolibre.dambetan01.repository.SectionRepository;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.UUID;

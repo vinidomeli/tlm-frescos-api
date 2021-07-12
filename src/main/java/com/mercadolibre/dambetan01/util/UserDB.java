@@ -10,11 +10,13 @@ import com.mercadolibre.dambetan01.repository.SellerRepository;
 import com.mercadolibre.dambetan01.repository.SupervisorRepository;
 import com.mercadolibre.dambetan01.repository.UserRepository;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.UUID;
 
 public class UserDB {
 
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private Faker faker = new Faker();
 
     UserRepository userRepository;
@@ -33,7 +35,7 @@ public class UserDB {
         User user = User.builder()
                 .login(faker.name().username())
                 .name(faker.name().firstName())
-                .password(faker.internet().password())
+                .password(passwordEncoder.encode("123"))
                 .role(role.getDescription())
                 .build();
 

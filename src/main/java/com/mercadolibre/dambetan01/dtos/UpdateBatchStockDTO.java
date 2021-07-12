@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.mercadolibre.dambetan01.model.Batch;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -69,4 +70,18 @@ public class UpdateBatchStockDTO {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dueDate;
+
+    public static UpdateBatchStockDTO fromEntity(Batch batch) {
+        return UpdateBatchStockDTO.builder()
+                .batchNumber(batch.getBatchNumber())
+                .productId(batch.getProduct().getId())
+                .currentQuantity(batch.getCurrentQuantity())
+                .minimumTemperature(batch.getMinimumTemperature())
+                .initialQuantity(batch.getInitialQuantity())
+                .currentQuantity(batch.getCurrentQuantity())
+                .manufacturingDate(batch.getManufacturingDate())
+                .manufacturingTime(batch.getManufacturingTime())
+                .dueDate(batch.getDueDate())
+                .build();
+    }
 }

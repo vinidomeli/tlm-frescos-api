@@ -1,10 +1,13 @@
 package com.mercadolibre.dambetan01.service.crud.impl;
 
 import com.mercadolibre.dambetan01.dtos.FullSectionDTO;
+import com.mercadolibre.dambetan01.dtos.SectionDTO;
 import com.mercadolibre.dambetan01.exceptions.ApiException;
+import com.mercadolibre.dambetan01.model.Section;
 import com.mercadolibre.dambetan01.repository.ProductRepository;
 import com.mercadolibre.dambetan01.repository.SectionRepository;
 import com.mercadolibre.dambetan01.service.crud.SectionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
