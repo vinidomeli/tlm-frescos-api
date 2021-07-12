@@ -5,8 +5,10 @@ import com.mercadolibre.dambetan01.exceptions.ApiException;
 import com.mercadolibre.dambetan01.model.*;
 import com.mercadolibre.dambetan01.repository.*;
 import com.mercadolibre.dambetan01.service.crud.PurchaseOrderContentService;
+import com.mercadolibre.dambetan01.service.crud.WalletService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
     CartContentServiceImpl cartContentServiceImpl;
     BatchRepository batchRepository;
     UserRepository userRepository;
+    WalletService walletService;
 
     public PurchaseOrderContentServiceImpl(PurchaseOrderRepository purchaseOrderRepository,
                                            PurchaseOrderContentRepository purchaseOrderContentRepository,
@@ -31,7 +34,8 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
                                            CartContentRepository cartContentRepository,
                                            CartContentServiceImpl cartContentServiceImpl,
                                            BatchRepository batchRepository,
-                                           UserRepository userRepository) {
+                                           UserRepository userRepository,
+                                           WalletService walletService) {
         this.purchaseOrderRepository = purchaseOrderRepository;
         this.purchaseOrderContentRepository = purchaseOrderContentRepository;
         this.cartRepository = cartRepository;
@@ -39,6 +43,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         this.cartContentServiceImpl = cartContentServiceImpl;
         this.batchRepository = batchRepository;
         this.userRepository = userRepository;
+        this.walletService = walletService;
     }
 
     @Override
@@ -50,22 +55,28 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
                 purchaseOrder);
 
         Double totalPrice = getTotalPrice(purchaseOrderContentList);
+        BigInteger totalPriceInCents = this.walletService.convertToCents(totalPrice);
+        this.walletService.deduct(userId, totalPriceInCents);
+
         purchaseOrder.setDate(LocalDate.now());
         purchaseOrder.setPrice(totalPrice);
-        Optional<User> user = userRepository.findById(userId);
+
+        Optional<User> user = this.userRepository.findById(userId);
+
         purchaseOrder.setUser(user.get());
-        purchaseOrderRepository.save(purchaseOrder);
-        purchaseOrderContentRepository.saveAll(purchaseOrderContentList);
+
+        this.purchaseOrderRepository.save(purchaseOrder);
+        this.purchaseOrderContentRepository.saveAll(purchaseOrderContentList);
 
         subtractBatchesQuantity(cartContentList);
-        cartContentServiceImpl.clearCartByContentList(cartContentList);
+        this.cartContentServiceImpl.clearCartByContentList(cartContentList);
 
         return makeResponseDto(purchaseOrder);
     }
 
     @Override
     public List<PurchaseOrderResponseDTO> listOrders(UUID userId) {
-        List<PurchaseOrder> orderList = purchaseOrderRepository.findAllByUserId(userId);
+        List<PurchaseOrder> orderList = this.purchaseOrderRepository.findAllByUserId(userId);
 
         boolean orderIsNullOrEmpty = orderList == null || orderList.isEmpty();
         if (orderIsNullOrEmpty) {
@@ -79,7 +90,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
     public List<CartContent> getCartContentList(UUID userId) {
         Cart cart = getCart(userId);
 
-        List<CartContent> cartContentList = cartContentRepository.findAllByCart(cart);
+        List<CartContent> cartContentList = this.cartContentRepository.findAllByCart(cart);
         boolean cartContentNullOrEmpty = cartContentList == null || cartContentList.isEmpty();
         if (cartContentNullOrEmpty) {
             throw new ApiException("404", "cart dont have content", 404);
@@ -92,7 +103,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
         List<String> insufficientProductList = new ArrayList<>();
         List<PurchaseOrderContent> purchaseOrderContentList = new ArrayList<>();
         for (CartContent cartContent : cartContentList) {
-            Product product = cartContentServiceImpl.getProduct(cartContent.getProduct().getId());
+            Product product = this.cartContentServiceImpl.getProduct(cartContent.getProduct().getId());
             List<Batch> batchList = findBatchesByProduct(product);
             batchList = filterBatchesByDueDate(batchList);
             Integer actualQuantity = getActualQuantityInBatch(batchList);
@@ -120,13 +131,13 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
 
     public void subtractBatchesQuantity(List<CartContent> cartContentList) {
         for (CartContent cartContent : cartContentList) {
-            Product product = cartContentServiceImpl.getProduct(cartContent.getProduct().getId());
+            Product product = this.cartContentServiceImpl.getProduct(cartContent.getProduct().getId());
 
             List<Batch> batchList = findBatchesByProduct(product);
 
             runBatchesByProduct(batchList, cartContent.getQuantity());
 
-            batchRepository.saveAll(batchList);
+            this.batchRepository.saveAll(batchList);
         }
     }
 
@@ -191,7 +202,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
     }
 
     public List<Batch> findBatchesByProduct(Product product) {
-        List<Batch> batchList = batchRepository.findBatchesByProduct(product);
+        List<Batch> batchList = this.batchRepository.findBatchesByProduct(product);
         if (batchList == null || batchList.isEmpty()) {
             throw new ApiException("404", "not found batches for this product", 404);
         }
@@ -200,7 +211,7 @@ public class PurchaseOrderContentServiceImpl implements PurchaseOrderContentServ
 
 
     public Cart getCart(UUID userId) {
-        Optional<Cart> cart = cartRepository.findByUserId(userId);
+        Optional<Cart> cart = this.cartRepository.findByUserId(userId);
         boolean cartExists = cart.isPresent();
         if (!cartExists) {
             throw new ApiException("404", "cart not exists", 404);

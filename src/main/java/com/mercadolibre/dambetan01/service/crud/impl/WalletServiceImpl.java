@@ -73,6 +73,16 @@ public class WalletServiceImpl implements WalletService {
         return WalletDTO.toDTO(wallet);
     }
 
+    @Override
+    public BigInteger convertToCents(Double amount) {
+        return BigInteger.valueOf(amount.longValue() * 100);
+    }
+
+    @Override
+    public BigInteger convertFromCents(BigInteger amount) {
+        return BigInteger.valueOf(amount.longValue() / 100);
+    }
+
     protected void validateAmount(BigInteger amount) {
         boolean invalidAmount = amount.compareTo(BigInteger.ONE) < 0;
 
