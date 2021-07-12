@@ -10,5 +10,7 @@ public interface CartContentService {
 
     CartResponseDTO removeToCart(UUID userId, Long cartContentId);
 
-    CartResponseDTO listAllCarts(UUID userId);
+    CartResponseDTO clearCart(UUID userId);
+
+    CartResponseDTO viewCart(UUID userId);
 }

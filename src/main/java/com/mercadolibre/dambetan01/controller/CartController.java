@@ -41,11 +41,19 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<CartResponseDTO> listAllCarts(@RequestHeader String token) {
+    @PostMapping("/clear")
+    public ResponseEntity<CartResponseDTO> clearCart(@RequestHeader String token){
         String username = SessionServiceImpl.getUsername(token);
         UUID userId = userService.findByLogin(username).getId();
-        CartResponseDTO response = cartContentService.listAllCarts(userId);
+        CartResponseDTO response = cartContentService.clearCart(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<CartResponseDTO> viewCart(@RequestHeader String token) {
+        String username = SessionServiceImpl.getUsername(token);
+        UUID userId = userService.findByLogin(username).getId();
+        CartResponseDTO response = cartContentService.viewCart(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
