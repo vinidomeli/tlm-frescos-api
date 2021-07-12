@@ -5,9 +5,10 @@ import com.mercadolibre.dambetan01.dtos.response.ProductFromSellerDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductResponseDTO;
 import com.mercadolibre.dambetan01.service.crud.*;
 import com.mercadolibre.dambetan01.service.impl.SessionServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,36 +17,26 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/fresh-products")
+@Tag(name = "Product Operations")
 public class ProductController {
 
-    ProductService productService;
-    UserService userService;
+    final ProductService productService;
+    final UserService userService;
 
     public ProductController(ProductService productService, UserService userService) {
         this.productService = productService;
         this.userService = userService;
     }
 
-    //ml-add-product ts-to-cart-01
-    //[REQ-02] GET: Complete list of products
-    //@PreAuthorize("hasAnyRole('BUYER')")
+    @Operation(summary = "Get all products", description = "Complete list of products")
     @GetMapping("/")
     public ResponseEntity<List<ProductResponseDTO>> listAllProducts() {
       List<ProductResponseDTO> productsList = productService.listAllProducts();
       return new ResponseEntity<>(productsList, HttpStatus.OK);
     }
 
-    // ml-add-product ts-to-cart-01
-    //[REQ-02] GET: Complete list of products by type
-    //@PreAuthorize("hasAnyRole('BUYER')")
-    @GetMapping("/list")
-    public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam String productType) {
-        List<ProductResponseDTO> productsType = productService.listProductsByCategory(productType);
-        return new ResponseEntity<>(productsType, HttpStatus.OK);
-    }
-
-    //Only Seller can register a new Product
-    @PostMapping("/product")
+    @Operation(summary = "Create a product", description = "Add a new product - *Only Seller can create a new Product*")
+    @PostMapping("/")
     public ResponseEntity<ProductRegisterDTO> createProduct(@RequestHeader String token,
                                                             @RequestBody @Valid ProductRegisterDTO productRegisterDTO) {
         String username = SessionServiceImpl.getUsername(token);
@@ -55,7 +46,14 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    //Only Seller can see his products
+    @Operation(summary = "Get products by category", description = "Complete list of products by type")
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductResponseDTO>> listProductsByCategory(@RequestParam String productType) {
+        List<ProductResponseDTO> productsType = productService.listProductsByCategory(productType);
+        return new ResponseEntity<>(productsType, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get products from seller", description = "Complete list of products from seller")
     @GetMapping("/myproducts")
     public ResponseEntity<List<ProductFromSellerDTO>> listProductsFromSeller(@RequestHeader String token) {
         String username = SessionServiceImpl.getUsername(token);

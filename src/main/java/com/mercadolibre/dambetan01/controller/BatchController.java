@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/fresh-products/batch")
 @Validated
-@Tag(name = "Batch Operations", description = "test")
+@Tag(name = "Batch Operations")
 public class BatchController {
 
     private final BatchService batchService;
