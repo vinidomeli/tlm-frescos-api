@@ -1,18 +1,11 @@
 package com.mercadolibre.dambetan01.controller;
 
-import com.mercadolibre.dambetan01.dtos.BatchStockDTO;
-import com.mercadolibre.dambetan01.dtos.SectionDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockDueDateDTO;
 import com.mercadolibre.dambetan01.dtos.response.ProductBatchesResponseDTO;
-import com.mercadolibre.dambetan01.dtos.response.ProductInWarehousesDTO;
-import com.mercadolibre.dambetan01.exceptions.NotFoundException;
-import com.mercadolibre.dambetan01.model.Batch;
 import com.mercadolibre.dambetan01.service.crud.BatchService;
 import com.mercadolibre.dambetan01.service.crud.ProductService;
 import com.mercadolibre.dambetan01.service.crud.WarehouseService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Min;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/fresh-products/batch")
@@ -48,10 +39,6 @@ public class BatchController {
     public ResponseEntity<List<ProductBatchesResponseDTO>> findBatchesByProductId(@RequestParam Long productId, @RequestParam(required = false) String order) {
 
         List<ProductBatchesResponseDTO> productBatchesResponseDTOS = batchService.findBatchesByProductId(productId, order);
-
-        if(productBatchesResponseDTOS.size() == 0) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        }
 
         return new ResponseEntity<>(productBatchesResponseDTOS, HttpStatus.OK);
     }
