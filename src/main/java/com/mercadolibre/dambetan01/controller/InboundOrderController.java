@@ -7,6 +7,8 @@ import com.mercadolibre.dambetan01.dtos.request.UpdateInboundOrderDTO;
 import com.mercadolibre.dambetan01.dtos.response.BatchStockResponseDTO;
 import com.mercadolibre.dambetan01.service.crud.*;
 import com.mercadolibre.dambetan01.service.impl.SessionServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +19,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/fresh-products")
+@RequestMapping("/api/v1/fresh-products/inboundorder")
+@Tag(name = "Inbound Order Operations")
 public class InboundOrderController {
 
-    InboundOrderService inboundOrderService;
-    ProductService productService;
-    WarehouseService warehouseService;
-    SectionService sectionService;
-    BatchService batchService;
-    UserService userService;
+    final InboundOrderService inboundOrderService;
+    final ProductService productService;
+    final WarehouseService warehouseService;
+    final SectionService sectionService;
+    final BatchService batchService;
+    final UserService userService;
 
-    public InboundOrderController(final InboundOrderService inboundOrderService, final ProductService productService,
-                                  final WarehouseService warehouseService, final SectionService sectionService,
-                                  final BatchService batchService, final UserService userService) {
+    public InboundOrderController(InboundOrderService inboundOrderService, ProductService productService, WarehouseService warehouseService, SectionService sectionService, BatchService batchService, UserService userService) {
         this.inboundOrderService = inboundOrderService;
         this.productService = productService;
         this.warehouseService = warehouseService;
@@ -38,8 +39,8 @@ public class InboundOrderController {
         this.userService = userService;
     }
 
-    //    ml-insert-batch-in-fulfillment-warehouse-01
-    @PostMapping(value = "/inboundorder")
+    @Operation(summary = "Register A New Inbound Order", description = "Register A New Inbound Order")
+    @PostMapping(value = "/")
     public ResponseEntity<BatchStockResponseDTO> registerNewInboundOrder(@RequestHeader String token,
                                                                          @RequestBody @Valid InboundOrderRequestDTO inboundOrderRequestDTO) {
         String username = SessionServiceImpl.getUsername(token);
@@ -67,8 +68,8 @@ public class InboundOrderController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    //    ml-insert-batch-in-fulfillment-warehouse-01
-    @PutMapping("/inboundorder")
+    @Operation(summary = "Update Inbound Order", description = "Update Inbound Order")
+    @PutMapping("/")
     public ResponseEntity<BatchStockResponseDTO> updateInboundOrder(@RequestHeader String token,
                                                                     @RequestBody @Valid UpdateInboundOrderDTO updateInboundOrderDTO) {
         String username = SessionServiceImpl.getUsername(token);
@@ -88,7 +89,6 @@ public class InboundOrderController {
         UUID sectionCode = updateInboundOrderDTO.getSection().getSectionCode();
         Long orderNumber = updateInboundOrderDTO.getOrderNumber();
 
-
         inboundOrderService.orderNumberExists(orderNumber);
         inboundOrderService.inboundOrderContainsSectionCode(orderNumber, sectionCode);
         sectionService.sectionExists(sectionCode);
@@ -105,11 +105,13 @@ public class InboundOrderController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/inboundorder/list")
+    @Operation(summary = "List Inbound Orders From A Supervisor", description = "Using the token, list all inbound orders of a specific supervisor")
+    @GetMapping("/list")
     public ResponseEntity<List<UpdateInboundOrderDTO>> listInboundOrderFromSupervisor(@RequestHeader String token) {
         String username = SessionServiceImpl.getUsername(token);
         UUID userId = userService.findByLogin(username).getId();
         List<UpdateInboundOrderDTO> response = inboundOrderService.listInboundOrderFromSupervisor(userId);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
