@@ -1,0 +1,927 @@
+{
+	"info": {
+		"_postman_id": "70a7eabd-ccdb-4832-b08f-5f593f6534af",
+		"name": "Frescos - The Last Mission",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"buyer1\",\n    \"login\": \"buyer1\",\n    \"password\": \"123\",\n    \"role\": \"Buyer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/register",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Seller",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"seller4\",\n    \"login\": \"seller4\",\n    \"password\": \"123\",\n    \"cnpj\": \"4444\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/register/seller",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register",
+						"seller"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-in",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"sup4\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/sign-in",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Warehouse",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{SUP_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"location\": \"Sao Paulo\",\n    \"login\": \"sup4\",\n    \"sections\": [\n        {\n            \"productType\": \"Refrigerate\",\n            \"limitSize\": 100,\n            \"temperature\": -10\n        },\n        {\n            \"productType\": \"Frozen\",\n            \"limitSize\": 100,\n            \"temperature\": -20\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/warehouse/create",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"warehouse",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Sections",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/section/list",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"section",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SELLER_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{SELLER_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"Refrigerate\",\n    \"price\": \"30.0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 | Complete Product List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 |  Product List by Category",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/list?productType=Fruits",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"list"
+					],
+					"query": [
+						{
+							"key": "productType",
+							"value": "Fruits"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-01 | Register Batch",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{SUP_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"section\": {\n        \"sectionCode\": \"d8a8dc6a-d50f-4d88-b700-b407a21feb50\",\n        \"warehouseCode\": \"b6ea1af2-dd5b-4c1b-a258-ca0356e6f043\"\n    },\n    \"batchStock\": [\n        {\n            \"productId\": 9,\n            \"currentTemperature\": 10.0,\n            \"minimumTemperature\": 10.0,\n            \"initialQuantity\": 100,\n            \"currentQuantity\": 100,\n            \"manufacturingDate\": \"2021-07-03\",\n            \"manufacturingTime\": \"2021-07-03 10:30\",\n            \"dueDate\": \"2023-07-30\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/inboundorder/",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"inboundorder",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Inbound Orders from Supervisor",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{SUP_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/inboundorder/list",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"inboundorder",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-03 | List all batches given a product that have a valid due date (3 weeks)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/batch/list?productId=9",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch",
+						"list"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": "9"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-01 | Update Batch",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{SUP_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderNumber\": 1,\n    \"orderDate\": \"2021-07-14\",\n    \"section\": {\n        \"sectionCode\": \"d8a8dc6a-d50f-4d88-b700-b407a21feb50\",\n        \"warehouseCode\": \"b6ea1af2-dd5b-4c1b-a258-ca0356e6f043\"\n    },\n    \"batchStock\": [\n        {\n            \"batchNumber\": 1,\n            \"productId\": 9,\n            \"minimumTemperature\": 10.0,\n            \"currentTemperature\": 10.0,\n            \"initialQuantity\": 100,\n            \"currentQuantity\": 50,\n            \"manufacturingDate\": \"2021-07-03\",\n            \"manufacturingTime\": \"2021-07-03 10:30\",\n            \"dueDate\": \"2023-07-30\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/inboundorder/",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"inboundorder",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 | addToCart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BUYER_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{BUYER_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"productId\": 9,\n    \"quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/cart/add",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"cart",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 | removeFromCart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BUYER_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{BUYER_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{bootcamp_host}}/cart/clear",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"cart",
+						"clear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 | ListAllContentsCart",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BUYER_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{BUYER_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{bootcamp_host}}/cart",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 | createPurchaseOrder",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BUYER_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{BUYER_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/purchase-order/create",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"purchase-order",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-02 | listOrders",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BUYER_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{BUYER_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/purchase-order/list",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"purchase-order",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-03 | Batches from product ID ordered by date",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/batch/list?productId=9&order=C",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch",
+						"list"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": "9"
+						},
+						{
+							"key": "order",
+							"value": "C"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-04 | Total Quantity of Products by Warehouse",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/warehouse/?productId=9",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"warehouse",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "productId",
+							"value": "9"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-05 | List Batches by Due Date",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/batch/due-date?numberOfDays=10000",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch",
+						"due-date"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "10000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US-05 | List Batches by Due Date and Product Type",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SUP_AUTH}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{bootcamp_host}}/api/v1/fresh-products/batch/due-date/list?numberOfDays=10000&productType=Refrigerate&order=asc",
+					"host": [
+						"{{bootcamp_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch",
+						"due-date",
+						"list"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "10000"
+						},
+						{
+							"key": "productType",
+							"value": "Refrigerate"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
