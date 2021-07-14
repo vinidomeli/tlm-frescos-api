@@ -21,4 +21,4 @@ Local: localhost:8082/swagger-ui.html
 URI: /swagger-ui.html
 
 ## ⚙️ Collections
-Você pode baixar as collections do projeto [aqui]().
+Você pode baixar as collections do projeto [aqui](https://github.com/vinidomeli/tlm-frescos-api/blob/feature/documentation/Frescos%20-%20The%20Last%20Mission.postman_collection.json).
